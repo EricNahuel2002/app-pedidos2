@@ -1,6 +1,5 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using System.IO;
 using Newtonsoft.Json.Linq;
 
 var builder = WebApplication.CreateBuilder(args);

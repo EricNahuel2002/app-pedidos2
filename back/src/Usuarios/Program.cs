@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using Usuarios.Context;
-using Usuarios.repositorio;
-using Usuarios.servicios;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,23 +15,21 @@ if (string.IsNullOrEmpty(connectionString))
     Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
 }
 
-builder.Services.AddDbContext<UsuariosDbContext>(options =>
-    options.UseMySql(
-        connectionString,serverVersion,
-        mysqlOptions => mysqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(10),
-            errorNumbersToAdd: null)
-    )
-);
+//builder.Services.AddDbContext<UsuariosDbContext>(options =>
+//    options.UseMySql(
+//        connectionString,serverVersion,
+//        mysqlOptions => mysqlOptions.EnableRetryOnFailure(
+//            maxRetryCount: 5,
+//            maxRetryDelay: TimeSpan.FromSeconds(10),
+//            errorNumbersToAdd: null)
+//    )
+//);
 
-builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
-builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 builder.Services.AddControllers();
-builder.Services.AddHttpClient<IUsuarioServicio,UsuarioServicio>(client =>
-{
-    client.BaseAddress = new Uri("http://localhost:5000/");
-});
+//builder.Services.AddHttpClient<,>(client =>
+//{
+//    client.BaseAddress = new Uri("http://localhost:5000/");
+//});
 
 // Add services to the container.
 builder.Services.AddOpenApi();
@@ -41,7 +37,7 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.MapControllers();
-ApplyMigrations(app);
+//ApplyMigrations(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -52,24 +48,24 @@ if (app.Environment.IsDevelopment())
 
 app.Run();
 
-static void ApplyMigrations(IApplicationBuilder app)
-{
-    using (var scope = app.ApplicationServices.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
+//static void ApplyMigrations(IApplicationBuilder app)
+//{
+//    using (var scope = app.ApplicationServices.CreateScope())
+//    {
+//        var dbContext = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
 
-        try
-        {
-            Console.WriteLine("Usuarios: Aplicando migraciones...");
-            dbContext.Database.Migrate();
-            Console.WriteLine("Usuarios: Migraciones aplicadas con éxito.");
-        }
-        catch (Exception ex)
-        {
-            // Captura errores de conexión o migración. 
-            // Esto sucede a menudo si el contenedor MySQL aún no está listo.
-            Console.WriteLine($"Usuarios: ERROR al aplicar migraciones: {ex.Message}");
-            // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
-        }
-    }
-}
+//        try
+//        {
+//            Console.WriteLine("Usuarios: Aplicando migraciones...");
+//            dbContext.Database.Migrate();
+//            Console.WriteLine("Usuarios: Migraciones aplicadas con éxito.");
+//        }
+//        catch (Exception ex)
+//        {
+//            // Captura errores de conexión o migración. 
+//            // Esto sucede a menudo si el contenedor MySQL aún no está listo.
+//            Console.WriteLine($"Usuarios: ERROR al aplicar migraciones: {ex.Message}");
+//            // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
+//        }
+//    }
+//}
