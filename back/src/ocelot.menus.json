@@ -1,0 +1,40 @@
+{
+  "Routes": [
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/menus/{id}",
+      "DownstreamPathTemplate": "/api/menus/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "menus",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/menus",
+      "DownstreamPathTemplate": "/api/menus",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "menus",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/menus/crear",
+      "DownstreamPathTemplate": "/api/menus/crear",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "menus",
+          "Port": 5000
+        }
+      ]
+    }
+  ]
+}

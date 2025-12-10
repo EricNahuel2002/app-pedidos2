@@ -1,0 +1,54 @@
+<div class="container py-4">
+
+  <!-- Logo -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">App Pedidos</h2>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Menú seleccionado -->
+    @if(contenidoCargado() && menu){
+      <div class="col-md-5">
+      <div class="card shadow-sm">
+        <img  
+          [src]="menu.imagen" 
+          class="card-img-top" 
+          alt="Imagen del menú"
+          style="height: 180px; object-fit: cover;"
+        >
+        
+        <div class="card-body">
+          <h5 class="card-title">{{ menu.nombre }}</h5>
+          <p class="text-muted mb-2">{{ menu.descripcion }}</p>
+          <p class="fw-bold fs-5">$ {{ menu.precio }}</p>
+        </div>
+      </div>
+    </div>
+  }@else{
+    <div class="alert alert-info text-center" role="alert">
+          <div class="container my-4">
+            <div class="row g-4">
+              <p-progress-spinner ariaLabel="loading" />
+            </div>
+          </div>
+        </div>
+  }
+
+    <!-- Formulario de confirmación -->
+    <div class="col-md-7">
+      <form [formGroup]="formOrden" (ngSubmit)="confirmarOrden()" class="p-4 border rounded shadow-sm bg-light">
+
+        <h5 class="mb-3">App pedidos</h5>
+        <input type="hidden" formControlName="idMenu" value="{{menu?.id}}">
+        <div class="d-flex gap-3 mt-4">
+          <button type="submit" class="btn btn-success px-4">Confirmar orden</button>
+          <button type="button" class="btn btn-outline-danger px-4" (click)="volverADetalle()">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,60 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+
+      <div class="card shadow-lg p-4">
+        <div class="card-body">
+
+          <h3 class="card-title text-center fw-bold mb-4 text-primary">Iniciar Sesión</h3>
+          <p class="text-center text-muted mb-4">Ingresa tus credenciales para acceder a tu App Pedidos.</p>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+            <div class="mb-3">
+              <label for="email" class="form-label fw-medium">Correo Electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+                placeholder="ejemplo@correo.com"
+                autocomplete="username"
+                required
+              >
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label fw-medium">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                formControlName="password"
+                placeholder="Ingresa tu contraseña"
+                autocomplete="current-password"
+                required
+              >
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100 btn-lg shadow-sm"
+            >
+              Iniciar Sesión
+            </button>
+
+          </form>
+
+          <button
+              type="button"
+              class="btn btn-info w-100 btn-lg shadow-sm mt-2 text-white"
+              (click)="registrarse()"
+            >
+              Registrarse
+            </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

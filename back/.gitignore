@@ -1,0 +1,76 @@
+==================================
+
+IGNORAR ARCHIVOS DE .NET / C#
+
+==================================
+
+Build output
+
+[Bb]in/
+[Oo]bj/
+
+Archivos de la configuración de la herramienta (Visual Studio, Rider)
+
+*.user
+*.suo
+*.userprefs
+.idea/
+
+Carpetas de caché y paquetes (NuGet)
+
+.nuget/
+dist/
+packages/
+publish/
+**/bin/
+**/obj/
+
+Archivos de prueba
+
+TestResults/
+*.trx
+*.log
+
+Archivos de configuración de lanzamiento local
+
+launchSettings.json
+
+==================================
+
+IGNORAR ARCHIVOS DE DOCKER
+
+==================================
+
+Evitar subir el override local de Docker Compose
+
+docker-compose.override.yml
+
+Archivos de proyecto de Visual Studio para Docker
+
+*.dcproj
+
+Archivos de imágenes o temporales de Docker (si se generan localmente)
+
+Dockerfile.bak
+
+==================================
+
+IGNORAR ARCHIVOS ESPECÍFICOS DE VS
+
+==================================
+
+.vs/
+*.vsp
+*.vsw
+
+
+
+src/Usuarios/obj
+
+src/Ordenes/obj
+
+src/Menus/obj
+
+src/Notificaciones/obj
+
+src/ApiGateway/obj

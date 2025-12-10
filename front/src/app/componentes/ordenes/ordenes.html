@@ -1,0 +1,58 @@
+<div class="container mt-4">
+
+  <h3 class="mb-4">Listado de Órdenes</h3>
+
+  <div class="table-responsive shadow-sm border rounded">
+    <table class="table table-striped align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Email</th>
+          <th>Precio</th>
+          <th>Estado</th>
+          <th>Dirección</th>
+          <th>Fecha</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (orden of ordenesListadas(); track orden.idOrden) {
+          <tr>
+            <td>{{ orden.idOrden }}</td>
+  
+            <td>{{ orden.nombreCliente }}</td>
+  
+            <td>{{ orden.emailCliente }}</td>
+  
+            <td>$ {{ orden.precioAPagar }}</td>
+  
+            <td>
+              <span 
+                class="badge px-3 py-2"
+                [ngClass]="{
+                  'bg-warning text-dark': orden.estado === 'pendiente',
+                  'bg-success': orden.estado === 'confirmada',
+                  'bg-danger': orden.estado === 'cancelada'
+                }"
+              >
+                {{ orden.estado }}
+              </span>
+            </td>
+  
+            <td>{{ orden.direccion }}</td>
+  
+            <td>{{ orden.fechaOrden}}</td>
+  
+            <td class="text-center">
+              <p-splitbutton class="text-white" label="Cancelar orden" (onClick)="cancelarOrden(orden.idOrden)" [model]="items" severity="danger" />
+            </td>
+          </tr>
+        }
+      </tbody>
+
+    </table>
+  </div>
+
+</div>

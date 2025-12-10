@@ -1,0 +1,71 @@
+/* src/styles.css o src/styles.scss */
+
+/* ------------------------------------------- */
+/* Corrección de Estilo para p-toast SUCCESS */
+/* ------------------------------------------- */
+
+/* Selector que apunta al contenedor principal del mensaje de éxito */
+.p-toast-message.p-toast-message-success {
+    /* Establece el fondo a un color sólido y visible */
+    background: #4CAF50 !important; /* Verde sólido, puedes usar el que prefieras */
+    
+    /* Elimina o reduce la opacidad (transparencia) si la hubiera */
+    opacity: 1 !important; 
+    
+    /* Añade una sombra más marcada para destacarlo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+/* Selector que apunta al contenido del mensaje (título y detalle) */
+.p-toast-message.p-toast-message-success .p-toast-detail,
+.p-toast-message.p-toast-message-success .p-toast-summary {
+    /* Asegura que el texto sea blanco o un color que contraste bien */
+    color: #FFFFFF !important; 
+}
+
+/* Selector que apunta al icono y al botón de cerrar */
+.p-toast-message.p-toast-message-success .p-toast-icon,
+.p-toast-message.p-toast-message-success .p-toast-icon-close {
+    color: #FFFFFF !important; 
+}
+
+/* Opcional: Para darle un toque más sólido al borde izquierdo */
+.p-toast-message.p-toast-message-success .p-toast-message-content {
+    border-left: 6px solid #388E3C !important; /* Un verde más oscuro para el borde */
+}
+
+/* src/styles.css o src/styles.scss */
+
+/* ------------------------------------------- */
+/* Corrección de Estilo para p-toast ERROR/DANGER */
+/* ------------------------------------------- */
+
+/* Selector que apunta al contenedor principal del mensaje de error */
+.p-toast-message.p-toast-message-error {
+    /* Establece el fondo a un color sólido y visible, típicamente rojo */
+    background: #d32f2f !important; /* Rojo sólido */
+    
+    /* Asegura que no haya transparencia */
+    opacity: 1 !important; 
+    
+    /* Añade una sombra para destacarlo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+/* Selector que apunta al contenido del mensaje (título y detalle) */
+.p-toast-message.p-toast-message-error .p-toast-detail,
+.p-toast-message.p-toast-message-error .p-toast-summary {
+    /* Asegura que el texto sea blanco para contrastar con el fondo rojo */
+    color: #FFFFFF !important; 
+}
+
+/* Selector que apunta al icono y al botón de cerrar */
+.p-toast-message.p-toast-message-error .p-toast-icon,
+.p-toast-message.p-toast-message-error .p-toast-icon-close {
+    color: #FFFFFF !important; 
+}
+
+/* Opcional: Para darle un toque más sólido al borde izquierdo */
+.p-toast-message.p-toast-message-error .p-toast-message-content {
+    border-left: 6px solid #b71c1c !important; /* Rojo más oscuro para el borde */
+}

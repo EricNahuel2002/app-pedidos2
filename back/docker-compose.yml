@@ -1,0 +1,120 @@
+services:
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_USER : admin
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: masterdb
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+        - "3307:3306"
+    volumes:
+        - mysql-data:/var/lib/mysql
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+        - pedidos-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uadmin", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateway/Dockerfile
+    ports:
+        - "5000:5000"
+    container_name: ApiGateway
+    environment:
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    depends_on:
+      - menus
+      - notificaciones
+      - ordenes
+      - usuarios
+    networks:
+        - pedidos-net
+    
+
+  menus:
+    image: ${DOCKER_REGISTRY-}menus
+    build:
+      context: .
+      dockerfile: src/Menus/Dockerfile
+    ports:
+        - "5001:5000"
+    container_name: Menus
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_menus;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+
+  notificaciones:
+    image: ${DOCKER_REGISTRY-}notificaciones
+    build:
+      context: .
+      dockerfile: src/Notificaciones/Dockerfile
+    ports:
+        - "5002:5000"
+    container_name: Notificaciones
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_notificaciones;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+  ordenes:
+    image: ${DOCKER_REGISTRY-}ordenes
+    build:
+      context: .
+      dockerfile: src/Ordenes/Dockerfile
+    ports:
+        - "5003:5000"
+    container_name: Ordenes
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_ordenes;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+  usuarios:
+    image: ${DOCKER_REGISTRY-}usuarios
+    build:
+      context: .
+      dockerfile: src/Usuarios/Dockerfile
+    ports:
+       - "5004:5000"
+    container_name: Usuarios
+    networks:
+        - pedidos-net
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_usuarios;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+networks:
+    pedidos-net:
+        
+volumes:
+    mysql-data:

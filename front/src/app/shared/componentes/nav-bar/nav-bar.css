@@ -1,0 +1,8 @@
+.nav-link.active {
+    color: var(--bs-primary) !important;
+    background-color: rgba(13, 110, 253, 0.1);
+    font-weight: 600 !important;
+}
+.nav-link:hover {
+    background-color: var(--bs-light);
+}

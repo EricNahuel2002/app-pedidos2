@@ -1,0 +1,9 @@
+{
+  "Routes": [],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000/",
+    "RouteOptions": {
+    "UseRegexInRouting": true
+  }
+  }
+}
