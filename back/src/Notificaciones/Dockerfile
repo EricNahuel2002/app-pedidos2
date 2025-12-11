@@ -11,15 +11,14 @@ EXPOSE 5000
 # SDK image for building/publishing
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
-ARG SERVICE_NAME=ApiGateway
-ARG PROJECT_PATH=src/ApiGateway/ApiGateway.csproj
+ARG SERVICE_NAME=Notificaciones
+ARG PROJECT_PATH=src/Notificaciones/Notificaciones.csproj
 
 WORKDIR /app-root
 
 # Copiamos la solution y el código fuente
 COPY AppPedidos.sln .
 COPY docker-compose.dcproj .
-
 COPY src/ ./src/
 
 # Restauramos paquetes (por solución para caché)
@@ -31,10 +30,9 @@ RUN dotnet build "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app-build --no-
 # Publicar el proyecto seleccionado
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-ARG PROJECT_PATH=src/ApiGateway/ApiGateway.csproj
+ARG PROJECT_PATH=src/Notificaciones/Notificaciones.csproj
 
 RUN dotnet publish "${PROJECT_PATH}" -c ${BUILD_CONFIGURATION} -o /app/publish /p:UseAppHost=false
-
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dev
 WORKDIR /app
@@ -44,10 +42,9 @@ COPY src/ ./src/
 
 RUN dotnet restore "AppPedidos.sln"
 
+# Imagen final runtime
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-
-
-ENTRYPOINT ["dotnet", "ApiGateway.dll"]
+ENTRYPOINT ["dotnet", "Notificaciones.dll"]

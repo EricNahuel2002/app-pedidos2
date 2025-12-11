@@ -1,0 +1,52 @@
+{
+  "Routes": [
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/usuarios/crear-cliente",
+      "DownstreamPathTemplate": "/api/usuarios/crear-cliente",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/usuarios/cliente/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/cliente/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/usuarios/validarSesion/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/validarSesion/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/usuarios/iniciar-sesion",
+      "DownstreamPathTemplate": "/api/usuarios/iniciar-sesion",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
+    }
+  ]
+}

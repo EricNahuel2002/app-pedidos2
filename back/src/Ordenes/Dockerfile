@@ -36,7 +36,6 @@ WORKDIR /app
 
 COPY AppPedidos.sln .
 COPY src/ ./src/ 
-COPY docker-compose.dcproj .
 
 RUN dotnet restore "AppPedidos.sln"
 

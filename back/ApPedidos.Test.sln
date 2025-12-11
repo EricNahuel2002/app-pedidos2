@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordenes.Test", "tests\Orden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Usuarios.Test", "tests\Usuarios.Test\Usuarios.Test.csproj", "{DAA410D1-805A-4579-903B-FF5BD10249BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menus", "src\Menus\Menus.csproj", "{87652EBA-4806-9AAF-5660-D09EA33B541D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{DAA410D1-805A-4579-903B-FF5BD10249BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAA410D1-805A-4579-903B-FF5BD10249BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAA410D1-805A-4579-903B-FF5BD10249BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87652EBA-4806-9AAF-5660-D09EA33B541D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87652EBA-4806-9AAF-5660-D09EA33B541D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87652EBA-4806-9AAF-5660-D09EA33B541D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87652EBA-4806-9AAF-5660-D09EA33B541D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
