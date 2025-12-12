@@ -1,0 +1,161 @@
+services:
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_USER : admin
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: masterdb
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+        - "3308:3306"
+    volumes:
+        - mysql-data-test:/var/lib/mysql
+        - ./init-test.sql:/docker-entrypoint-initdb.d/init-test.sql
+    networks:
+        - pedidos-net-test
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uadmin", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateway/Dockerfile
+      target: dev
+    ports:
+        - "5100:5000"
+    container_name: ApiGatewayTest
+    environment:
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Testing"
+    volumes:
+        - ./src/ApiGateway:/app
+        - nuget-cache-test:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
+    command:
+        bash -c "dotnet watch run --project /app/ApiGateway.csproj --no-launch-profile"
+    depends_on:
+      - menus
+      - notificaciones
+      - ordenes
+      - usuarios
+    networks:
+        - pedidos-net-test
+    
+
+  menus:
+    image: ${DOCKER_REGISTRY-}menus
+    build:
+      context: .
+      dockerfile: src/Menus/Dockerfile
+      target: dev
+    ports:
+        - "5101:5000"
+    container_name: MenusTest
+    networks:
+        - pedidos-net-test
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_menus_test;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Testing"
+    volumes:
+        - ./src/Menus:/app
+        - nuget-cache-test:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
+    command:
+        bash -c "dotnet watch run --project /app/Menus.csproj --no-launch-profile"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+
+  notificaciones:
+    image: ${DOCKER_REGISTRY-}notificaciones
+    build:
+      context: .
+      dockerfile: src/Notificaciones/Dockerfile
+      target: dev
+    ports:
+        - "5102:5000"
+    container_name: NotificacionesTest
+    networks:
+        - pedidos-net-test
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_notificaciones_test;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Testing"
+    volumes:
+        - ./src/Notificaciones:/app
+        - nuget-cache-test:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
+    command:
+        bash -c "dotnet watch run --project /app/Notificaciones.csproj --no-launch-profile"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+  ordenes:
+    image: ${DOCKER_REGISTRY-}ordenes
+    build:
+      context: .
+      dockerfile: src/Ordenes/Dockerfile
+      target: dev
+    ports:
+        - "5103:5000"
+    container_name: OrdenesTest
+    networks:
+        - pedidos-net-test
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_ordenes_test;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Testing"
+    volumes:
+        - ./src/Ordenes:/app
+        - nuget-cache-test:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
+    command:
+        bash -c "dotnet watch run --project /app/Ordenes.csproj --no-launch-profile"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+  usuarios:
+    image: ${DOCKER_REGISTRY-}usuarios
+    build:
+      context: .
+      dockerfile: src/Usuarios/Dockerfile
+      target: dev
+    ports:
+       - "5104:5000"
+    container_name: UsuariosTest
+    networks:
+        - pedidos-net-test
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_usuarios_test;User=admin;Password=root;SslMode=None;"
+      ASPNETCORE_URLS: "http://+:5000"
+      ASPNETCORE_ENVIRONMENT: "Testing"
+    volumes:
+        - ./src/Usuarios:/app
+        - nuget-cache-test:/root/.nuget/packages
+        - /app/bin
+        - /app/obj
+    command:
+        bash -c "dotnet watch run --project /app/Usuarios.csproj --no-launch-profile"
+    depends_on:
+        mysql:
+            condition: service_healthy
+
+networks:
+    pedidos-net-test:
+        
+volumes:
+    mysql-data-test:
+    nuget-cache-test:

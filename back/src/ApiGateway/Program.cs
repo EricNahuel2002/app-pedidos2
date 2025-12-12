@@ -5,10 +5,8 @@ using Newtonsoft.Json.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// carga base (opcional)
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-// Leer y merge manual de archivos Ocelot que contienen "Routes"
 var merged = new JObject();
 var allRoutes = new JArray();
 
@@ -21,13 +19,11 @@ foreach (var f in files)
     if (routes != null)
         foreach (var r in routes)
             allRoutes.Add(r);
-    // si hay GlobalConfiguration y no existe en merged a��delo
     if (merged["GlobalConfiguration"] == null && j["GlobalConfiguration"] != null)
         merged["GlobalConfiguration"] = j["GlobalConfiguration"];
 }
 merged["Routes"] = allRoutes;
 
-// A�adimos la configuraci�n mergeada a memoria para que Ocelot la use
 var memStream = new MemoryStream();
 var sw = new StreamWriter(memStream);
 sw.Write(merged.ToString());
@@ -65,3 +61,5 @@ if (app.Environment.IsDevelopment())
 
 await app.UseOcelot();
 await app.RunAsync();
+
+public partial class Program { }
