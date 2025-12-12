@@ -94,7 +94,7 @@ public class MenusServicioTests:IClassFixture<MenuServicioFixture>
     [Fact]
     public async Task QueSePuedaCrearUnMenu()
     {
-        Menu menu = new Menu { Id = 1, Nombre = "Hamburguesa", Descripcion = "Rica hamburguesa" };
+        Menu menu = new Menu { Nombre = "Hamburguesa", Descripcion = "Rica hamburguesa" };
 
         _menuRepoMock.Setup(repo => repo.CrearMenuAsync(menu)).ReturnsAsync(menu.Id);
 

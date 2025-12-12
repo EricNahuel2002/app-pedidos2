@@ -2,8 +2,8 @@
   "Routes": [
     {
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/menu/{id}",
-      "DownstreamPathTemplate": "/api/menu/{id}",
+      "UpstreamPathTemplate": "/menus/{id}",
+      "DownstreamPathTemplate": "/api/menus/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -26,8 +26,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/menu/crear",
-      "DownstreamPathTemplate": "/api/menu/crear",
+      "UpstreamPathTemplate": "/menus/crear",
+      "DownstreamPathTemplate": "/api/menus/crear",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

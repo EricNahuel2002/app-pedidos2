@@ -67,7 +67,7 @@ public class MenusRepositorioTests: IClassFixture<MenuRepositorioFixture>
         }
         using(var ctx = new MenuDbContext(_options))
         {
-            var nuevoMenu = new Menu { Id = 1, Nombre = "Pizza" };
+            var nuevoMenu = new Menu { Nombre = "Pizza" };
             ctx.Menus.Add(nuevoMenu);
             await ctx.SaveChangesAsync();
         }

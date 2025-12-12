@@ -15,12 +15,13 @@ public class MenuController : Controller
     {
         _menuServicio = menuServicio;
     }
-
+    [HttpPost("crear")]
     public async Task<IActionResult> CrearMenuAsync(Menu menu)
     {
         return Ok(await _menuServicio.CrearMenuAsync(menu));
     }
 
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetMenuAsync(int id)
     {
         try
@@ -33,7 +34,7 @@ public class MenuController : Controller
             return StatusCode(500, "Error al obtener el menu: " + ex.Message);
         }
     }
-
+    [HttpGet]
     public async Task<IActionResult> GetMenusAsync()
     {
         try

@@ -20,7 +20,7 @@ public class MenuServicio : IMenuServicio
 
     public async Task<int> CrearMenuAsync(Menu menu)
     {
-        return 1;
+        return await _menuRepo.CrearMenuAsync(menu);
     }
 
     public async Task<Menu> ObtenerMenuAsync(int id)
