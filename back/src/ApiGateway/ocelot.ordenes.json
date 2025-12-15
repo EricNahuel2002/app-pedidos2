@@ -10,7 +10,11 @@
           "Host": "ordenes",
           "Port": 5000
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes":  []
+      }
     },
     {
       "UpstreamHttpMethod": [ "Get" ],
@@ -38,8 +42,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Patch" ],
-      "UpstreamPathTemplate": "/ordenes/cancelar/cliente/{idCliente}/orden/{idOrden}",
-      "DownstreamPathTemplate": "/api/ordenes/cancelar/cliente/{idCliente}/orden/{idOrden}",
+      "UpstreamPathTemplate": "/ordenes/cancelar",
+      "DownstreamPathTemplate": "/api/ordenes/cancelar",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

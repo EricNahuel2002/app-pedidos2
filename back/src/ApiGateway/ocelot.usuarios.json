@@ -2,8 +2,8 @@
   "Routes": [
     {
       "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/usuarios/crear-cliente",
-      "DownstreamPathTemplate": "/api/usuarios/crear-cliente",
+      "UpstreamPathTemplate": "/usuarios/registrar",
+      "DownstreamPathTemplate": "/api/usuarios/registrar",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -38,8 +38,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/usuarios/iniciar-sesion",
-      "DownstreamPathTemplate": "/api/usuarios/iniciar-sesion",
+      "UpstreamPathTemplate": "/usuarios/login",
+      "DownstreamPathTemplate": "/api/usuarios/login",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

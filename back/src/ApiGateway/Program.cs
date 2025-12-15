@@ -5,12 +5,13 @@ using Newtonsoft.Json.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 
+
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
 var merged = new JObject();
 var allRoutes = new JArray();
 
-var files = new[] { "ocelot.json", "ocelot.usuarios.json", "ocelot.menus.json", "ocelot.ordenes.json" };
+var files = new[] { "ocelot.json", "ocelot.usuarios.json", "ocelot.menus.json", "ocelot.ordenes.json", "ocelot.auth.json" };
 foreach (var f in files)
 {
     if (!File.Exists(f)) continue;
@@ -46,6 +47,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddOcelot(builder.Configuration);
 
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 app.UseRouting();
@@ -58,7 +60,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-
+app.MapControllers();
 await app.UseOcelot();
 await app.RunAsync();
 
