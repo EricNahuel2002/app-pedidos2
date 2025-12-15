@@ -10,8 +10,11 @@ public class UsuariosDbContext: DbContext
     {
     }
 
+    public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Cliente> Clientes { get; set; }
     public DbSet<Repartidor> Repartidores { get; set; }
+    public DbSet<Rol> Roles { get; set; }
+    public DbSet<UsuarioRol> UsuariosRoles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,12 +1,25 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Usuarios.contexto;
+using Usuarios.repositorio;
 
-namespace Usuarios.Test.fixture
+namespace Usuarios.Test.fixture;
+
+public class UsuariosRepositorioFixture
 {
-    internal class UsuariosControladorFixture
+    public DbContextOptions<UsuariosDbContext> _ctx;
+    public IUsuariosRepositorio usuarioRepo;
+
+    public UsuariosRepositorioFixture()
     {
+        _ctx = new DbContextOptionsBuilder<UsuariosDbContext>()
+        .UseInMemoryDatabase(databaseName: "usuario_db" + Guid.NewGuid().ToString())
+        .Options;
+        usuarioRepo = new UsuariosRepositorio(new UsuariosDbContext(_ctx));
     }
 }

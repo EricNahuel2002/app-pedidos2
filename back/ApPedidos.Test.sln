@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordenes", "src\Ordenes\Orde
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Usuarios", "src\Usuarios\Usuarios.csproj", "{EB09C170-D204-7256-5FB8-346E3F849E2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Test", "tests\Auth.Test\Auth.Test.csproj", "{DC39CB6F-916B-1C66-7C9A-F02D8207FE37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth", "src\Auth\Auth.csproj", "{1E0E8537-545C-B1B1-7A43-705785F3A211}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{EB09C170-D204-7256-5FB8-346E3F849E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB09C170-D204-7256-5FB8-346E3F849E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB09C170-D204-7256-5FB8-346E3F849E2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC39CB6F-916B-1C66-7C9A-F02D8207FE37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC39CB6F-916B-1C66-7C9A-F02D8207FE37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC39CB6F-916B-1C66-7C9A-F02D8207FE37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC39CB6F-916B-1C66-7C9A-F02D8207FE37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E0E8537-545C-B1B1-7A43-705785F3A211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E0E8537-545C-B1B1-7A43-705785F3A211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E0E8537-545C-B1B1-7A43-705785F3A211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E0E8537-545C-B1B1-7A43-705785F3A211}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
