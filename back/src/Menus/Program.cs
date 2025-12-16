@@ -2,9 +2,34 @@ using Menus.Context;
 using Menus.repositorio;
 using Menus.servicio;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration;
+var jwtKey = configuration["Jwt:Key"];
+builder.Services
+    .AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.MapInboundClaims = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = "auth-api",
+            ValidAudience = "api-gateway",
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtKey)
+            )
+        };
+    });
+builder.Services.AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -35,6 +60,10 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 ApplyMigrations(app);
 
 // Configure the HTTP request pipeline.

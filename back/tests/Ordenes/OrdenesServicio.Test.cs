@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Ordenes.Entidad;
 using Ordenes.repositorio;
 using Ordenes.servicio;
 using Ordenes.Test.fixture;
@@ -23,21 +24,21 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
 
 
     [Fact]
-    public async Task QueSePuedanObtenerOrdenesDelCliente()
+    public async Task QueSePuedanObtenerOrdenesDelClienteAsync()
     {
+        int idUsuario = 1;
+        List<Orden> ordenes = new List<Orden>
+        {
+            new Orden{ IdOrden = 1, IdUsuario = idUsuario, IdMenu = 1, NombreCliente = "Eric"
+            , EmailCliente = "ericaquino2002@gmail.com", Direccion = "Lamadrid",
+                PrecioAPagar = 50, Estado = "Pendiente", FechaOrden = DateTime.UtcNow}
+        };
 
-    }
+        _repo.Setup(r => r.ObtenerOrdenesDelClienteAsync(idUsuario)).ReturnsAsync(ordenes);
 
-    [Fact]
-    public async Task SiAlObtenerOrdenesDelClienteElClienteNoExisteELServicioLanzaClienteInexistenteException()
-    {
+        var resultado = await _ordenesServicio.ObtenerOrdenesDelClienteAsync(idUsuario);
 
-    }
-
-    [Fact]
-    public async Task SiAlObtenerOrdenesDelClienteNoHayOrdenesRetornaNull()
-    {
-
+        Assert.Equal(ordenes[0].EmailCliente, resultado[0].EmailCliente);
     }
 
     [Fact]

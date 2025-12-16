@@ -10,11 +10,7 @@
           "Host": "menus",
           "Port": 5000
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+      ]
     },
     {
       "UpstreamHttpMethod": [ "Get" ],
@@ -26,11 +22,7 @@
           "Host": "menus",
           "Port": 5000
         }
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+      ]
     },
     {
       "UpstreamHttpMethod": [ "Post" ],
@@ -46,6 +38,9 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "administrador"
       }
     }
   ]

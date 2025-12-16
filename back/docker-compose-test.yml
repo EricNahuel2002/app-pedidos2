@@ -65,6 +65,9 @@ services:
       ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_menus_test;User=admin;Password=root;SslMode=None;"
       ASPNETCORE_URLS: "http://+:5000"
       ASPNETCORE_ENVIRONMENT: "Testing"
+      Jwt__Key: "FJ39dk20slA9sLq93KDlq02Lskf92KDl"
+      Jwt__Issuer: "auth-api"
+      Jwt__Audience: "api-gateway"
     volumes:
         - ./src/Menus:/app
         - nuget-cache-test:/root/.nuget/packages
@@ -92,6 +95,9 @@ services:
       ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_notificaciones_test;User=admin;Password=root;SslMode=None;"
       ASPNETCORE_URLS: "http://+:5000"
       ASPNETCORE_ENVIRONMENT: "Testing"
+      Jwt__Key: "FJ39dk20slA9sLq93KDlq02Lskf92KDl"
+      Jwt__Issuer: "auth-api"
+      Jwt__Audience: "api-gateway"
     volumes:
         - ./src/Notificaciones:/app
         - nuget-cache-test:/root/.nuget/packages
@@ -118,6 +124,9 @@ services:
       ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=db_ordenes_test;User=admin;Password=root;SslMode=None;"
       ASPNETCORE_URLS: "http://+:5000"
       ASPNETCORE_ENVIRONMENT: "Testing"
+      Jwt__Key: "FJ39dk20slA9sLq93KDlq02Lskf92KDl"
+      Jwt__Issuer: "auth-api"
+      Jwt__Audience: "api-gateway"
     volumes:
         - ./src/Ordenes:/app
         - nuget-cache-test:/root/.nuget/packages

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Ordenes.dto;
 using Ordenes.servicio;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Ordenes.controller;
 [ApiController]
@@ -41,12 +43,21 @@ public class OrdenesController : Controller
             return StatusCode(500, e.Message);
         }
     }
-    [HttpGet("cliente/{id}")]
-    public async Task<IActionResult> ListarOrdenesDelClienteAsync(int id)
+    [HttpGet("cliente")]
+    public async Task<IActionResult> ListarOrdenesDelClienteAsync()
     {
         try
         {
-            var resultado = await _ordenServicio.ObtenerOrdenesDelClienteAsync(id);
+            var id = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+            if (id == null) 
+            { 
+                return Unauthorized(); 
+            }
+
+            int idUsuario = int.Parse(id);
+            
+            var resultado = await _ordenServicio.ObtenerOrdenesDelClienteAsync(idUsuario);
             return Ok(resultado);
         }
         catch(Exception e)

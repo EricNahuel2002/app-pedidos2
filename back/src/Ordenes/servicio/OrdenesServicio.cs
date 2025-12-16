@@ -32,6 +32,6 @@ public class OrdenesServicio : IOrdenesServicio
 
     public async Task<List<Orden>> ObtenerOrdenesDelClienteAsync(int idCliente)
     {
-        throw new NotImplementedException();
+        return await _repo.ObtenerOrdenesDelClienteAsync(idCliente);
     }
 }

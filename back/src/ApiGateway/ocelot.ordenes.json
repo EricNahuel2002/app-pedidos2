@@ -2,8 +2,8 @@
   "Routes": [
     {
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/ordenes/cliente/{id}",
-      "DownstreamPathTemplate": "/api/ordenes/cliente/{id}",
+      "UpstreamPathTemplate": "/ordenes/cliente",
+      "DownstreamPathTemplate": "/api/ordenes/cliente",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -13,7 +13,10 @@
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes":  []
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "cliente"
       }
     },
     {
@@ -26,7 +29,14 @@
           "Host": "ordenes",
           "Port": 5000
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "cliente"
+      }
     },
     {
       "UpstreamHttpMethod": [ "Post" ],
@@ -38,19 +48,33 @@
           "Host": "ordenes",
           "Port": 5000
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "cliente"
+      }
     },
     {
       "UpstreamHttpMethod": [ "Patch" ],
-      "UpstreamPathTemplate": "/ordenes/cancelar",
-      "DownstreamPathTemplate": "/api/ordenes/cancelar",
+      "UpstreamPathTemplate": "/ordenes/cancelar/{idOrden}",
+      "DownstreamPathTemplate": "/api/ordenes/cancelar/{idOrden}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "ordenes",
           "Port": 5000
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "cliente"
+      }
     }
   ]
 }

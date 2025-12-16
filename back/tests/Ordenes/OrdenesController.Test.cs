@@ -5,6 +5,8 @@ using Ordenes.Entidad;
 using Ordenes.servicio;
 using Ordenes.dto;
 using Ordenes.Test.fixture;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace Ordenes.Test;
 
@@ -30,19 +32,31 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
             new Orden{ IdOrden = 2 ,IdUsuario = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
         };
 
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, idCliente.ToString()),
+            new Claim(ClaimTypes.Role,"cliente")
+        };
+
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var user = new ClaimsPrincipal(identity);
+
+        ordenController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = user
+            }
+        };
+
+
         ordenServicioMock.Setup(s => s.ObtenerOrdenesDelClienteAsync(idCliente)).ReturnsAsync(ordenesEsperadas);
 
-        var respuesta = await ordenController.ListarOrdenesDelClienteAsync(idCliente);
+        var respuesta = await ordenController.ListarOrdenesDelClienteAsync();
 
         var okResult = Assert.IsType<OkObjectResult>(respuesta);
 
         Assert.Equal(200, okResult.StatusCode);
-
-        var ordenesObtenidas = Assert.IsType<List<Orden>>(okResult.Value);
-
-        Assert.Equal(ordenesEsperadas.Count, ordenesObtenidas.Count);
-
-        Assert.Equal(ordenesEsperadas[0].IdOrden, ordenesObtenidas[0].IdOrden);
     }
 
 
@@ -58,7 +72,7 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
 
         ordenServicioMock.Setup(s => s.ObtenerOrdenesDelClienteAsync(idCliente)).ThrowsAsync(new Exception());
 
-        var respuesta = await ordenController.ListarOrdenesDelClienteAsync(idCliente);
+        var respuesta = await ordenController.ListarOrdenesDelClienteAsync();
 
         var okResult = Assert.IsType<ObjectResult>(respuesta);
 

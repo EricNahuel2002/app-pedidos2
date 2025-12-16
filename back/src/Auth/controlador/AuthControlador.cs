@@ -52,7 +52,7 @@ public class AuthControlador : ControllerBase
         {
         new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
         new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
-        new Claim(ClaimTypes.Role, usuario.Rol),
+        new Claim("role", usuario.Rol),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
@@ -68,9 +68,18 @@ public class AuthControlador : ControllerBase
 
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
+        Response.Cookies.Append("access_token", tokenString, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddMinutes(expireMinutes),
+            Path = "/"
+        });
+
+
         return Ok(new
         {
-            token = tokenString,
             rol = usuario.Rol
         });
 

@@ -14,8 +14,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/usuarios/cliente/{id}",
-      "DownstreamPathTemplate": "/api/usuarios/cliente/{id}",
+      "UpstreamPathTemplate": "/usuarios/cliente",
+      "DownstreamPathTemplate": "/api/usuarios/cliente",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
