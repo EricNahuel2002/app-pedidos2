@@ -77,7 +77,7 @@ namespace Usuarios.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rol");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Usuarios.entidad.Usuario", b =>
@@ -103,7 +103,7 @@ namespace Usuarios.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuario");
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Usuarios.entidad.UsuarioRol", b =>
@@ -126,7 +126,7 @@ namespace Usuarios.Migrations
 
                     b.HasIndex("IdUsuario");
 
-                    b.ToTable("UsuarioRol");
+                    b.ToTable("UsuariosRoles");
                 });
 
             modelBuilder.Entity("Usuarios.entidad.Cliente", b =>

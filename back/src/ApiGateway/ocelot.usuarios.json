@@ -25,21 +25,9 @@
       ]
     },
     {
-      "UpstreamHttpMethod": [ "Get" ],
-      "UpstreamPathTemplate": "/usuarios/validarSesion/{id}",
-      "DownstreamPathTemplate": "/api/usuarios/validarSesion/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "usuarios",
-          "Port": 5000
-        }
-      ]
-    },
-    {
       "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/usuarios/login",
-      "DownstreamPathTemplate": "/api/usuarios/login",
+      "UpstreamPathTemplate": "/usuarios/validarLogin",
+      "DownstreamPathTemplate": "/api/usuarios/validarLogin",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

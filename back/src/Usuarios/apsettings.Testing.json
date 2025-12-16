@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Port=3308;Database=db_usuarios_test;User=admin;Password=root;SslMode=None;AllowPublicKeyRetrieval=True;"
+  }
+}

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Ordenes.dto;
 using Ordenes.servicio;
 
 namespace Ordenes.controller;
 [ApiController]
+[Authorize]
 [Route("api/ordenes")]
 public class OrdenesController : Controller
 {
@@ -39,12 +41,12 @@ public class OrdenesController : Controller
             return StatusCode(500, e.Message);
         }
     }
-
-    public async Task<IActionResult> ListarOrdenesDelClienteAsync(int idCliente)
+    [HttpGet("cliente/{id}")]
+    public async Task<IActionResult> ListarOrdenesDelClienteAsync(int id)
     {
         try
         {
-            var resultado = await _ordenServicio.ObtenerOrdenesDelClienteAsync(idCliente);
+            var resultado = await _ordenServicio.ObtenerOrdenesDelClienteAsync(id);
             return Ok(resultado);
         }
         catch(Exception e)

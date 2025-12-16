@@ -31,7 +31,9 @@ services:
     container_name: ApiGatewayTest
     environment:
       ASPNETCORE_URLS: "http://+:5000"
-      ASPNETCORE_ENVIRONMENT: "Testing"
+      Jwt__Key: "FJ39dk20slA9sLq93KDlq02Lskf92KDl"
+      Jwt__Issuer: "auth-api"
+      Jwt__Audience: "api-gateway"
     volumes:
         - ./src/ApiGateway:/app
         - nuget-cache-test:/root/.nuget/packages
@@ -54,8 +56,8 @@ services:
       context: .
       dockerfile: src/Menus/Dockerfile
       target: dev
-    ports:
-        - "5101:5000"
+    expose:
+        - "5000"
     container_name: MenusTest
     networks:
         - pedidos-net-test
@@ -81,8 +83,8 @@ services:
       context: .
       dockerfile: src/Notificaciones/Dockerfile
       target: dev
-    ports:
-        - "5102:5000"
+    expose:
+        - "5000"
     container_name: NotificacionesTest
     networks:
         - pedidos-net-test
@@ -107,8 +109,8 @@ services:
       context: .
       dockerfile: src/Ordenes/Dockerfile
       target: dev
-    ports:
-        - "5103:5000"
+    expose:
+        - "5000"
     container_name: OrdenesTest
     networks:
         - pedidos-net-test
@@ -133,8 +135,8 @@ services:
       context: .
       dockerfile: src/Usuarios/Dockerfile
       target: dev
-    ports:
-       - "5104:5000"
+    expose:
+       - "5000"
     container_name: UsuariosTest
     networks:
         - pedidos-net-test
@@ -152,6 +154,35 @@ services:
     depends_on:
         mysql:
             condition: service_healthy
+  auth:
+    image: ${DOCKER_REGISTRY-}auth
+    build:
+      context: .
+      dockerfile: src/Auth/Dockerfile
+      target: dev
+    expose:
+      - "5000"
+    container_name: AuthTest
+    networks:
+      - pedidos-net-test
+    environment:
+      ASPNETCORE_URLS: "http://+:5000"
+      Jwt__Key: "FJ39dk20slA9sLq93KDlq02Lskf92KDl"
+      Jwt__Issuer: "auth-api"
+      Jwt__Audience: "api-gateway"
+    volumes:
+      - ./src/Auth:/app
+      - nuget-cache-test:/root/.nuget/packages
+      - /app/bin
+      - /app/obj 
+    command:
+        bash -c "dotnet watch run --project /app/Auth.csproj --no-launch-profile"
+    depends_on:
+      - menus
+      - notificaciones
+      - ordenes
+      - usuarios
+      - apigateway
 
 networks:
     pedidos-net-test:

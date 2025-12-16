@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-//using Ordenes.Context;
-//using Ordenes.repositorios;
-//using Ordenes.servicios;
+using Ordenes.contexto;
+using Ordenes.repositorio;
+using Ordenes.servicio;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Text;
 
@@ -39,15 +39,15 @@ if (string.IsNullOrEmpty(connectionString))
     Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
 }
 
-//builder.Services.AddDbContext<OrdenesDbContext>(options =>
-//    options.UseMySql(
-//        connectionString, serverVersion,
-//        mysqlOptions => mysqlOptions.MigrationsAssembly(typeof(OrdenesDbContext).Assembly.FullName)
-//    )
-//);
+builder.Services.AddDbContext<OrdenesDbContext>(options =>
+    options.UseMySql(
+        connectionString, serverVersion,
+        mysqlOptions => mysqlOptions.MigrationsAssembly(typeof(OrdenesDbContext).Assembly.FullName)
+    )
+);
 
-//builder.Services.AddScoped<IOrdenesServicio, OrdenesServicio>();
-//builder.Services.AddScoped<IOrdenesRepositorio, OrdenesRepositorio>();
+builder.Services.AddScoped<IOrdenesRepositorio, OrdenesRepositorio>();
+builder.Services.AddScoped<IOrdenesServicio, OrdenesServicio>();
 
 builder.Services.AddHttpClient("ApiGateway", client =>
 {
@@ -75,25 +75,25 @@ app.UseAuthorization();
 
 app.Run();
 
-//static void ApplyMigrations(IApplicationBuilder app)
-//{
-//    using (var scope = app.ApplicationServices.CreateScope())
-//    {
-//        // NOTA: Se utiliza OrdenesDbContext para este microservicio
-//        var dbContext = scope.ServiceProvider.GetRequiredService<OrdenesDbContext>();
+static void ApplyMigrations(IApplicationBuilder app)
+{
+    using (var scope = app.ApplicationServices.CreateScope())
+    {
+        // NOTA: Se utiliza OrdenesDbContext para este microservicio
+        var dbContext = scope.ServiceProvider.GetRequiredService<OrdenesDbContext>();
 
-//        try
-//        {
-//            Console.WriteLine("Ordenes: Aplicando migraciones...");
-//            // Este método crea la base de datos si no existe y aplica todas las migraciones pendientes.
-//            dbContext.Database.Migrate();
-//            Console.WriteLine("Ordenes: Migraciones aplicadas con éxito.");
-//        }
-//        catch (Exception ex)
-//        {
-//            // Captura errores de conexión o migración. 
-//            Console.WriteLine($"Ordenes: ERROR al aplicar migraciones: {ex.Message}");
-//            // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
-//        }
-//    }
-//}
+        try
+        {
+            Console.WriteLine("Ordenes: Aplicando migraciones...");
+            // Este método crea la base de datos si no existe y aplica todas las migraciones pendientes.
+            dbContext.Database.Migrate();
+            Console.WriteLine("Ordenes: Migraciones aplicadas con éxito.");
+        }
+        catch (Exception ex)
+        {
+            // Captura errores de conexión o migración. 
+            Console.WriteLine($"Ordenes: ERROR al aplicar migraciones: {ex.Message}");
+            // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
+        }
+    }
+}

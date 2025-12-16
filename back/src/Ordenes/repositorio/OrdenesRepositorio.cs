@@ -1,4 +1,4 @@
-﻿using Ordenes.Context;
+﻿using Ordenes.contexto;
 
 namespace Ordenes.repositorio;
 

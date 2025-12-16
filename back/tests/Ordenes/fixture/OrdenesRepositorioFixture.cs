@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ordenes.Context;
+using Ordenes.contexto;
 using Ordenes.repositorio;
 using System;
 using System.Collections.Generic;

@@ -21,6 +21,7 @@ public class UsuariosRepositorio: IUsuariosRepositorio
     {
         return await _ctx.Usuarios.Where(u => u.Email.Equals(email))
             .Include(u => u.UsuarioRoles)
+            .ThenInclude(ur => ur.Rol)
             .FirstOrDefaultAsync();
     }
 }

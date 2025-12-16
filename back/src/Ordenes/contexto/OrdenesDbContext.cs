@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Ordenes.Entidad;
 
-namespace Ordenes.Context;
+namespace Ordenes.contexto;
 
 public class OrdenesDbContext: DbContext
 {

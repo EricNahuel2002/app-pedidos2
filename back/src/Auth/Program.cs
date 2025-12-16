@@ -31,7 +31,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddHttpClient("usuario", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5005");
+    client.BaseAddress = new Uri("http://usuarios:5000");
 });
 
 
@@ -44,7 +44,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

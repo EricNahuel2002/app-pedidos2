@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Usuarios.dto;
+using Usuarios.excepciones;
 using Usuarios.servicio;
 
 namespace Usuarios.controlador
@@ -16,6 +17,7 @@ namespace Usuarios.controlador
             _usuarioServicio = usuarioServicio;
         }
 
+        [HttpPost("validarLogin")]
         public async Task<IActionResult> ValidarCredencialesDeUsuario(LoginDto dto)
         {
             try
@@ -23,9 +25,13 @@ namespace Usuarios.controlador
                 var usuario = await _usuarioServicio.ValidarCredencialesDeUsuario(dto);
                 return Ok(usuario);
             }
-            catch(Exception e)
+            catch (CredencialesInvalidasException)
             {
-                return StatusCode(500, e.Message);
+                return Unauthorized();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno");
             }
         }
     }

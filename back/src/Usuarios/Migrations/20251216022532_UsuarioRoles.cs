@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Usuarios.Migrations
 {
     /// <inheritdoc />
-    public partial class UsuariosClientesRepartidoresConRoles : Migration
+    public partial class UsuarioRoles : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace Usuarios.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Rol",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -25,12 +25,12 @@ namespace Usuarios.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rol", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Usuario",
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -44,7 +44,7 @@ namespace Usuarios.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuario", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -63,9 +63,9 @@ namespace Usuarios.Migrations
                 {
                     table.PrimaryKey("PK_Clientes", x => x.IdUsuario);
                     table.ForeignKey(
-                        name: "FK_Clientes_Usuario_IdUsuario",
+                        name: "FK_Clientes_Usuarios_IdUsuario",
                         column: x => x.IdUsuario,
-                        principalTable: "Usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -85,16 +85,16 @@ namespace Usuarios.Migrations
                 {
                     table.PrimaryKey("PK_Repartidores", x => x.IdUsuario);
                     table.ForeignKey(
-                        name: "FK_Repartidores_Usuario_IdUsuario",
+                        name: "FK_Repartidores_Usuarios_IdUsuario",
                         column: x => x.IdUsuario,
-                        principalTable: "Usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "UsuarioRol",
+                name: "UsuariosRoles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -104,30 +104,30 @@ namespace Usuarios.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsuarioRol", x => x.Id);
+                    table.PrimaryKey("PK_UsuariosRoles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UsuarioRol_Rol_IdRol",
+                        name: "FK_UsuariosRoles_Roles_IdRol",
                         column: x => x.IdRol,
-                        principalTable: "Rol",
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsuarioRol_Usuario_IdUsuario",
+                        name: "FK_UsuariosRoles_Usuarios_IdUsuario",
                         column: x => x.IdUsuario,
-                        principalTable: "Usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsuarioRol_IdRol",
-                table: "UsuarioRol",
+                name: "IX_UsuariosRoles_IdRol",
+                table: "UsuariosRoles",
                 column: "IdRol");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsuarioRol_IdUsuario",
-                table: "UsuarioRol",
+                name: "IX_UsuariosRoles_IdUsuario",
+                table: "UsuariosRoles",
                 column: "IdUsuario");
         }
 
@@ -141,13 +141,13 @@ namespace Usuarios.Migrations
                 name: "Repartidores");
 
             migrationBuilder.DropTable(
-                name: "UsuarioRol");
+                name: "UsuariosRoles");
 
             migrationBuilder.DropTable(
-                name: "Rol");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Usuario");
+                name: "Usuarios");
         }
     }
 }

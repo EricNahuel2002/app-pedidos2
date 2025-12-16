@@ -11,8 +11,8 @@ using Usuarios.contexto;
 namespace Usuarios.Migrations
 {
     [DbContext(typeof(UsuariosDbContext))]
-    [Migration("20251214194006_UsuariosClientesRepartidoresConRoles")]
-    partial class UsuariosClientesRepartidoresConRoles
+    [Migration("20251216022532_UsuarioRoles")]
+    partial class UsuarioRoles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,7 +80,7 @@ namespace Usuarios.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rol");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Usuarios.entidad.Usuario", b =>
@@ -106,7 +106,7 @@ namespace Usuarios.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuario");
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Usuarios.entidad.UsuarioRol", b =>
@@ -129,7 +129,7 @@ namespace Usuarios.Migrations
 
                     b.HasIndex("IdUsuario");
 
-                    b.ToTable("UsuarioRol");
+                    b.ToTable("UsuariosRoles");
                 });
 
             modelBuilder.Entity("Usuarios.entidad.Cliente", b =>

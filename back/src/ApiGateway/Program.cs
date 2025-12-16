@@ -1,6 +1,8 @@
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using Newtonsoft.Json.Linq;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,29 @@ builder.Services.AddOcelot(builder.Configuration);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
+var configuration = builder.Configuration;
+var jwtKey = configuration["Jwt:Key"];
+builder.Services
+    .AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = "auth-api",
+            ValidAudience = "api-gateway",
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtKey)
+            )
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 app.UseRouting();
 
@@ -61,6 +86,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 await app.UseOcelot();
 await app.RunAsync();
 

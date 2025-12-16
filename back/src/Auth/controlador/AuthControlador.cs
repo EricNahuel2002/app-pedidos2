@@ -30,7 +30,7 @@ public class AuthControlador : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
-        var respuesta = await _client.PostAsJsonAsync("/api/usuarios/login", dto);
+        var respuesta = await _client.PostAsJsonAsync("/api/usuarios/validarLogin", dto);
 
         if (!respuesta.IsSuccessStatusCode)
         {
@@ -38,10 +38,6 @@ public class AuthControlador : ControllerBase
         }
 
         var usuario = await respuesta.Content.ReadFromJsonAsync<UsuarioDto>();
-
-        if (usuario == null){
-            return StatusCode(404, new { mensaje = "Credenciales invalidas" });
-        }
 
         var key = new SymmetricSecurityKey(
         Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])

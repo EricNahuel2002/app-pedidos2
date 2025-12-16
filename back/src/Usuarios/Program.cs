@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Usuarios.contexto;
+using Usuarios.repositorio;
+using Usuarios.servicio;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,10 @@ builder.Services.AddDbContext<UsuariosDbContext>(options =>
             errorNumbersToAdd: null)
     )
 );
+
+builder.Services.AddScoped<IUsuariosRepositorio, UsuariosRepositorio>();
+builder.Services.AddScoped<IUsuariosServicio, UsuariosServicio>();
+
 
 builder.Services.AddControllers();
 // Add services to the container.
