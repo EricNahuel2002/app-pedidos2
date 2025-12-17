@@ -12,21 +12,22 @@ export class OrdenService {
   private http = inject(HttpClient);
   
   
-  ConfirmarOrden(idMenu: number, idUsuario: number) {
-    return this.http.post(`${environment.BACKEND_URL}/ordenes/confirmarOrden`,{idMenu,idUsuario},{ responseType: 'text' as 'json' });
+  ConfirmarOrden(idMenu: number) {
+    return this.http.post(`${environment.BACKEND_URL}/ordenes/confirmarOrden`,{idMenu},{ withCredentials: true, responseType: 'text' as 'json' });
   }
   
-  obtenerOrdenesDelCliente(idCliente: number | null):Observable<Orden[]> {
+  obtenerOrdenesDelCliente():Observable<Orden[]> {
     
-    return this.http.get<Orden[]>(`${environment.BACKEND_URL}/ordenes/cliente/${idCliente}`); 
+    return this.http.get<Orden[]>(`${environment.BACKEND_URL}/ordenes/cliente`,{withCredentials: true}); 
   }
 
-  cancelarOrden(idCliente:number,idOrden:number){
+  cancelarOrden(idOrden:number){
     return this.http.patch(
-        `${environment.BACKEND_URL}/ordenes/cancelar/cliente/${idCliente}/orden/${idOrden}`, 
+        `${environment.BACKEND_URL}/ordenes/cancelar/${idOrden}`, 
         null,
         { 
-            responseType: 'text'
+            responseType: 'text',
+            withCredentials : true
         }
     );
   }

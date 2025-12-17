@@ -33,7 +33,7 @@ export class RegistrarUsuario implements OnInit{
       if(this.registroForm.valid){
         const {nombre,email,password,direccion,telefono} = this.registroForm.value;
 
-        this.usuarioService.registrarUsuario(nombre,email,password,direccion,telefono).subscribe({
+        this.usuarioService.registrarCliente(nombre,email,password,direccion,telefono).subscribe({
           next: (data) => this.router.navigate(['/iniciar-sesion']),
           error: (err) => console.log("ERROR AL REGISTRARSE")
         })

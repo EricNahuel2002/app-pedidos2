@@ -31,9 +31,7 @@ export class IniciarSesion implements OnInit{
     const { email, password } = this.loginForm.value;
 
     this.usuarioService.iniciarSesion(email, password).subscribe({
-      next: (idUsuario : number) => {
-        console.log("ID QUE LLEGA AL INICIAR SESION:",idUsuario)
-        this.usuarioService.guardarUsuarioEnSesion(idUsuario)
+      next: () => {
         this.router.navigate(['/']);
       },
       error: (err) => {

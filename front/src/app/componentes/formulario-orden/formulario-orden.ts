@@ -27,14 +27,12 @@ export class FormularioOrden implements OnInit {
   messageService = inject(MessageService);
 
   idMenu!:number;
-  idUsuario!:number;
   menu:Menu | null = null;
   formOrden !: FormGroup;
   contenidoCargado = signal<boolean>(false);
 
   ngOnInit(): void {
     this.idMenu = Number(this.route.snapshot.paramMap.get('id'));
-    this.idUsuario = this.usuarioService.obtenerUsuarioDeSesion() ?? 0;
 
     this.formOrden = this.formBuilder.group(
       {
@@ -67,11 +65,7 @@ export class FormularioOrden implements OnInit {
 
     if(this.formOrden.valid){
       const {idMenu} = this.formOrden.value;
-      if(!this.idUsuario || this.idUsuario == 0){
-        this.router.navigate(['/iniciar-sesion', { queryParams: { returnUrl: this.router.url }}])
-        return;
-      }else{
-        this.ordenService.ConfirmarOrden(idMenu,this.idUsuario).subscribe({
+        this.ordenService.ConfirmarOrden(idMenu).subscribe({
         next: (data) => {
         this.messageService.add({
           severity: 'success',
@@ -82,7 +76,7 @@ export class FormularioOrden implements OnInit {
         },
         error : (err) => console.log(err)
       })
-      }
+      
 
       
     }

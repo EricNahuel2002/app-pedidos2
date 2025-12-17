@@ -29,15 +29,13 @@ export class Ordenes implements OnInit{
     items:MenuItem[] = [MenuItemContent]
   
     ngOnInit(): void {
-      const idCliente = this.usuarioService.obtenerUsuarioDeSesion();
-
-      this.listarOrdenesDelUsuario(idCliente);
+      this.listarOrdenesDelUsuario();
     }
 
 
-    listarOrdenesDelUsuario(idCliente: number | null) {
+    listarOrdenesDelUsuario() {
 
-      this.ordenService.obtenerOrdenesDelCliente(idCliente).subscribe({
+      this.ordenService.obtenerOrdenesDelCliente().subscribe({
         next: (data) => this.ordenes.set(data),
         error : (err) => console.log("ERROR AL OBTENER ORDENES DEL CLIENTE",err)
       })
@@ -45,12 +43,9 @@ export class Ordenes implements OnInit{
 
     cancelarOrden(idOrden:number){
 
-      const idCliente = this.usuarioService.obtenerUsuarioDeSesion();
-
-      if(idCliente){
-        this.ordenService.cancelarOrden(idCliente,idOrden).subscribe({
+        this.ordenService.cancelarOrden(idOrden).subscribe({
         next: (data:string) => {
-          this.listarOrdenesDelUsuario(idCliente);
+          this.listarOrdenesDelUsuario();
             this.messageService.add({
         severity: 'success',
         summary: 'Orden cancelada',
@@ -76,11 +71,6 @@ export class Ordenes implements OnInit{
                 });
             }
       })
-      }else{
-        console.log("No se encontro el id del cliente")
-      }
-
-
       
     }
 

@@ -11,6 +11,18 @@
           "Port": 5000
         }
       ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/auth/haySesionValida",
+      "DownstreamPathTemplate": "/api/auth/haySesionValida",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "auth",
+          "Port": 5000
+        }
+      ]
     }
   ]
 }

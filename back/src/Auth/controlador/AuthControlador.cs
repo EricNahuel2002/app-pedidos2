@@ -1,4 +1,5 @@
 ﻿using Auth.dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -72,7 +73,7 @@ public class AuthControlador : ControllerBase
         {
             HttpOnly = true,
             Secure = false,
-            SameSite = SameSiteMode.Strict,
+            SameSite = SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddMinutes(expireMinutes),
             Path = "/"
         });
@@ -83,5 +84,18 @@ public class AuthControlador : ControllerBase
             rol = usuario.Rol
         });
 
+    }
+
+
+    [Authorize]
+    [HttpGet("haySesionValida")]
+    public IActionResult VerificarSesionValida()
+    {
+        return Ok(new
+        {
+            id = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value,
+            email = User.FindFirst(JwtRegisteredClaimNames.Email)?.Value,
+            rol = User.FindFirst("role")?.Value
+        });
     }
 }

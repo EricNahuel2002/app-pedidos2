@@ -34,7 +34,7 @@ export class RegistroRepartidor {
       if(this.registroForm.valid){
         const {email,nombre,dni,contrasenia,direccion,telefono} = this.registroForm.value;
 
-        this.usuarioService.registrarUsuario(nombre,email,dni,contrasenia,direccion).subscribe({
+        this.usuarioService.registrarRepartidor(nombre,email,dni,contrasenia,direccion).subscribe({
           next: (data) => this.router.navigate(['/iniciar-sesion']),
           error: (err) => console.log("ERROR AL REGISTRARSE")
         })
