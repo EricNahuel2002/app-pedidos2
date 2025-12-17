@@ -1,24 +1,22 @@
 ﻿using Moq;
 using Ordenes.repositorio;
 using Ordenes.servicio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ordenes.Test.fixture;
 
 public class OrdenesServicioFixture
 {
-
     public Mock<IOrdenesRepositorio> repoMock;
+    public Mock<IHttpClientFactory> factoryMock;
     public IOrdenesServicio ordenServicio;
-
 
     public OrdenesServicioFixture()
     {
         repoMock = new Mock<IOrdenesRepositorio>();
-        ordenServicio = new OrdenesServicio(repoMock.Object);
+        factoryMock = new Mock<IHttpClientFactory>();
+
+        var httpClient = new HttpClient();
+
+        factoryMock.Setup(_ => _.CreateClient("Apigateway")).Returns(httpClient);
+
+        ordenServicio = new OrdenesServicio(repoMock.Object, factoryMock.Object);
     }
 }

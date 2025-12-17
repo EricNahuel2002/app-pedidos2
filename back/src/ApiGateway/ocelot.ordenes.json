@@ -39,9 +39,9 @@
       }
     },
     {
-      "UpstreamHttpMethod": [ "Post" ],
-      "UpstreamPathTemplate": "/ordenes/confirmarOrden",
-      "DownstreamPathTemplate": "/api/ordenes/confirmarOrden",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/ordenes/confirmarOrden/{idMenu}",
+      "DownstreamPathTemplate": "/api/ordenes/confirmarOrden/{idMenu}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -59,8 +59,8 @@
     },
     {
       "UpstreamHttpMethod": [ "Patch" ],
-      "UpstreamPathTemplate": "/ordenes/cancelar/{idOrden}",
-      "DownstreamPathTemplate": "/api/ordenes/cancelar/{idOrden}",
+      "UpstreamPathTemplate": "/ordenes/cancelar",
+      "DownstreamPathTemplate": "/api/ordenes/cancelar",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

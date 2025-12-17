@@ -72,7 +72,7 @@ builder.Services.AddDbContext<OrdenesDbContext>(options =>
 builder.Services.AddScoped<IOrdenesRepositorio, OrdenesRepositorio>();
 builder.Services.AddScoped<IOrdenesServicio, OrdenesServicio>();
 
-builder.Services.AddHttpClient("ApiGateway", client =>
+builder.Services.AddHttpClient("Apigateway", client =>
 {
     client.BaseAddress = new Uri("http://apigateway:5000/");
 });

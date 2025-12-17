@@ -7,6 +7,7 @@ namespace Usuarios.repositorio;
 public interface IUsuariosRepositorio
 {
     Task<Usuario> ObtenerUsuarioPorEmail(string email);
+    Task<Usuario> ObtenerUsuarioPorId(int id);
 }
 public class UsuariosRepositorio: IUsuariosRepositorio
 {
@@ -22,6 +23,13 @@ public class UsuariosRepositorio: IUsuariosRepositorio
         return await _ctx.Usuarios.Where(u => u.Email.Equals(email))
             .Include(u => u.UsuarioRoles)
             .ThenInclude(ur => ur.Rol)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Usuario> ObtenerUsuarioPorId(int id)
+    {
+        return await _ctx.Usuarios.Where(u => u.Id == id)
+            .Include(u => u.Cliente)
             .FirstOrDefaultAsync();
     }
 }

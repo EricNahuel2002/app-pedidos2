@@ -18,11 +18,21 @@ public class OrdenesController : Controller
         this._ordenServicio = ordenServicio;
     }
 
-    public async Task<IActionResult> CancelarOrdenDelCliente(int idCliente, int idOrden)
+    [HttpPatch("cancelar")]
+    public async Task<IActionResult> CancelarOrdenDelCliente([FromBody]CancelarOrdenRequestDto dto)
     {
         try
         {
-            var resultado = await _ordenServicio.CancelarOrdenDelCliente(idCliente, idOrden);
+            if(dto == null)
+            {
+                return NotFound();
+            }
+            var idCliente = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            if(idCliente == null)
+            {
+                return Unauthorized();
+            }
+            var resultado = await _ordenServicio.CancelarOrdenDelCliente(int.Parse(idCliente), dto.IdOrden);
             return Ok(resultado);
         }
         catch(Exception e)
@@ -31,11 +41,18 @@ public class OrdenesController : Controller
         }
     }
 
-    public async Task<IActionResult> ConfirmarOrdenDelClienteAsync(ClienteMenuDto dto)
+    [HttpGet("confirmarOrden/{idMenu}")]
+    public async Task<IActionResult> ConfirmarOrdenDelClienteAsync(int idMenu)
     {
         try
         {
-            var resultado = await _ordenServicio.ConfirmarOrdenDelCliente(dto);
+            var idUsuario = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            if(idUsuario == null)
+            {
+                return Unauthorized();
+            }
+            ClienteMenuDto dto = new ClienteMenuDto(int.Parse(idUsuario), idMenu);
+            var resultado = await _ordenServicio.ConfirmarOrdenDelClienteAsync(dto);
             return StatusCode(201, resultado);
         }
         catch(Exception e)

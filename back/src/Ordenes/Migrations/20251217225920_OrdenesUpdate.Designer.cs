@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordenes.contexto;
 
@@ -11,9 +12,11 @@ using Ordenes.contexto;
 namespace Ordenes.Migrations
 {
     [DbContext(typeof(OrdenesDbContext))]
-    partial class OrdenesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251217225920_OrdenesUpdate")]
+    partial class OrdenesUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

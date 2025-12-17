@@ -25,25 +25,11 @@ public class MenuServicio : IMenuServicio
 
     public async Task<Menu> ObtenerMenuAsync(int id)
     {
-        try
-        {
-            return await _menuRepo.ObtenerMenuAsync(id);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
+        return await _menuRepo.ObtenerMenuAsync(id);
     }
 
     public async Task<List<Menu>> ObtenerMenusAsync()
     {
-        try
-        {
-            return await _menuRepo.ObtenerMenusAsync();
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
+        return await _menuRepo.ObtenerMenusAsync();
     }
 }

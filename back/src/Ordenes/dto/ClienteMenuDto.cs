@@ -6,8 +6,4 @@ using System.Threading.Tasks;
 
 namespace Ordenes.dto;
 
-public class ClienteMenuDto
-{
-    public int IdCliente { get; set; }
-    public int IdMenu { get; set; }
-}
+public record ClienteMenuDto (int idUsuario, int idMenu);

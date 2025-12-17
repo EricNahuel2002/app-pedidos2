@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Usuarios.dto;
 using Usuarios.excepciones;
@@ -32,6 +33,20 @@ namespace Usuarios.controlador
             catch (Exception)
             {
                 return StatusCode(500, "Error interno");
+            }
+        }
+
+
+        [HttpGet("cliente/{id}")]
+        public async Task<IActionResult> ListarCliente(int id)
+        {
+            try
+            {
+                UsuarioClienteDto dto = await _usuarioServicio.ObtenerUsuarioCliente(id);
+                return Ok(dto);
+            }catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
         }
     }

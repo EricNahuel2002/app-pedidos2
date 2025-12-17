@@ -13,6 +13,8 @@ namespace Ordenes.Entidad
         [Required]
         public int IdMenu { get; set; }
         [Required]
+        public string NombreMenu { get; set; } = null!;
+        [Required]
         [MaxLength(150)] 
         public string NombreCliente { get; set; } = null!;
 

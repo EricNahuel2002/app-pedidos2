@@ -7,6 +7,7 @@ using Ordenes.dto;
 using Ordenes.Test.fixture;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Ordenes.Test;
 
@@ -70,6 +71,23 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
             new Orden{ IdOrden = 2 ,IdUsuario = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
         };
 
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, idCliente.ToString()),
+            new Claim(ClaimTypes.Role,"cliente")
+        };
+
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var user = new ClaimsPrincipal(identity);
+
+        ordenController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = user
+            }
+        };
+
         ordenServicioMock.Setup(s => s.ObtenerOrdenesDelClienteAsync(idCliente)).ThrowsAsync(new Exception());
 
         var respuesta = await ordenController.ListarOrdenesDelClienteAsync();
@@ -86,11 +104,30 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
     [Fact]
     public async Task QueSePuedaConfirmarUnaOrdenYRetorneCreatedAsync()
     {
-        ClienteMenuDto dto = new ClienteMenuDto { IdCliente = 1, IdMenu = 1 };
+        int idCliente = 1;
+        int idMenu = 1;
+        ClienteMenuDto dto = new ClienteMenuDto(idCliente,idMenu);
 
-        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelCliente(dto)).ReturnsAsync("Orden confirmada");
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, idCliente.ToString()),
+            new Claim("role","cliente")
+        };
 
-        var respuesta = await ordenController.ConfirmarOrdenDelClienteAsync(dto);
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var user = new ClaimsPrincipal(identity);
+
+        ordenController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = user
+            }
+        };
+
+        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(dto)).ReturnsAsync("Orden confirmada");
+
+        var respuesta = await ordenController.ConfirmarOrdenDelClienteAsync(idMenu);
 
         var result = Assert.IsType<ObjectResult>(respuesta);
 
@@ -100,11 +137,30 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
     [Fact]
     public async Task SiAlConfirmarUnaOrdenDelClienteElServicioFallaRetornaHttp500()
     {
-        ClienteMenuDto dto = new ClienteMenuDto { IdCliente = 1, IdMenu = 1 };
+        int idCliente = 1;
+        int idMenu = 1;
+        ClienteMenuDto dto = new ClienteMenuDto(idCliente, idMenu); ;
 
-        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelCliente(dto)).ThrowsAsync(new Exception());
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, idCliente.ToString()),
+            new Claim("role","cliente")
+        };
 
-        var respuesta = await ordenController.ConfirmarOrdenDelClienteAsync(dto);
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var user = new ClaimsPrincipal(identity);
+
+        ordenController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = user
+            }
+        };
+
+        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(dto)).ThrowsAsync(new Exception());
+
+        var respuesta = await ordenController.ConfirmarOrdenDelClienteAsync(idMenu);
 
         var result = Assert.IsType<ObjectResult>(respuesta);
 
@@ -117,10 +173,29 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
     {
         int idCliente = 1;
         int idOrden = 1;
+        string rol = "cliente";
+
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub,idCliente.ToString()),
+            new Claim("role",rol)
+        };
+
+        var identity = new ClaimsIdentity(claims, "TestOrdenes");
+        var user = new ClaimsPrincipal(identity);
+
+        ordenController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = user
+            }
+        };
+
 
         ordenServicioMock.Setup(s => s.CancelarOrdenDelCliente(idCliente,idOrden)).ReturnsAsync("Orden cancelada");
 
-        var resultado = await ordenController.CancelarOrdenDelCliente(idCliente, idOrden);
+        var resultado = await ordenController.CancelarOrdenDelCliente(idOrden);
 
         var result = Assert.IsType<OkObjectResult>(resultado);
 
@@ -132,10 +207,28 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
     {
         int idCliente = 1;
         int idOrden = 1;
+        string rol = "cliente";
+
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub,idCliente.ToString()),
+            new Claim("role",rol)
+        };
+
+        var identity = new ClaimsIdentity(claims, "TestOrdenes");
+        var user = new ClaimsPrincipal(identity);
+
+        ordenController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = user
+            }
+        };
 
         ordenServicioMock.Setup(s => s.CancelarOrdenDelCliente(idCliente, idOrden)).ThrowsAsync(new Exception());
 
-        var resultado = await ordenController.CancelarOrdenDelCliente(idCliente, idOrden);
+        var resultado = await ordenController.CancelarOrdenDelCliente(idOrden);
 
         var result = Assert.IsType<ObjectResult>(resultado);
 
