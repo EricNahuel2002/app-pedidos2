@@ -22,26 +22,25 @@ public class UsuariosServicio : IUsuariosServicio
 
     public async Task<UsuarioClienteDto> ObtenerUsuarioCliente(int id)
     {
+        Usuario usuario = await _usuarioRepo.ObtenerUsuarioPorId(id);
 
-        try
+        if (usuario == null)
+            throw new KeyNotFoundException($"No se encontró el usuario con id {id}");
+        if (usuario.Cliente == null)
+            throw new InvalidOperationException($"El usuario {usuario.Id} no tiene un cliente asociado");
+
+        UsuarioClienteDto dto = new UsuarioClienteDto()
         {
-            Usuario usuario = await _usuarioRepo.ObtenerUsuarioPorId(id);
+            Id = usuario.Id,
+            Nombre = usuario.Nombre,
+            Email = usuario.Email,
+            Direccion = usuario.Cliente.Direccion,
+            NumeroTelefonico = usuario.Cliente.NumeroTelefonico,
+            Saldo = usuario.Cliente.Saldo
+        };
 
-            UsuarioClienteDto dto = new UsuarioClienteDto
-            {
-                Id = usuario.Id,
-                Nombre = usuario.Nombre,
-                Email = usuario.Email,
-                Direccion = usuario.Cliente.Direccion,
-                NumeroTelefonico = usuario.Cliente.NumeroTelefonico,
-                Saldo = usuario.Cliente.Saldo
-            };
+        return dto;
 
-            return dto;
-        }catch(Exception e)
-        {
-            throw;
-        }
     }
 
     public async Task<UsuarioDto> ValidarCredencialesDeUsuario(LoginDto dto)
@@ -51,6 +50,10 @@ public class UsuariosServicio : IUsuariosServicio
         if(usuario == null || !dto.Contrasenia.Equals(usuario.Contrasenia))
         {
             throw new CredencialesInvalidasException();
+        }
+        if(usuario.UsuarioRoles == null)
+        {
+            throw new InvalidOperationException($"El usuario no tiene usuariosRoles asignados");
         }
 
         Rol rol = usuario.UsuarioRoles.Select(ur => ur.Rol).FirstOrDefault() ?? throw new InvalidOperationException("El usuario no tiene roles asignados.");

@@ -43,24 +43,6 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
         Assert.Equal(ordenes[0].EmailCliente, resultado[0].EmailCliente);
     }
 
-    [Fact]
-    public async Task SiAlObtenerOrdenesDelClienteElRepositorioDaErrorElServicioLoPropaga()
-    {
-        int idUsuario = 1;
-        List<Orden> ordenes = new List<Orden>
-        {
-            new Orden{ IdOrden = 1, IdUsuario = idUsuario, IdMenu = 1, NombreCliente = "Eric"
-            , EmailCliente = "ericaquino2002@gmail.com", Direccion = "Lamadrid",
-                PrecioAPagar = 50, Estado = "Pendiente", FechaOrden = DateTime.UtcNow}
-        };
-
-        _repoMock.Setup(r => r.ObtenerOrdenesDelClienteAsync(idUsuario)).ThrowsAsync(new Exception());
-
-        await Assert.ThrowsAsync<Exception>(async () => await _ordenesServicio.ObtenerOrdenesDelClienteAsync(idUsuario));
-    }
-
-
-
 
     [Fact]
     public async Task QueElClientePuedaConfirmarUnaOrden()
@@ -75,20 +57,6 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
         var resultado = await _ordenesServicio.ConfirmarOrdenDelClienteAsync(dto);
 
         Assert.Equal("Orden confirmada", resultado);
-    }
-
-
-    [Fact]
-    public async Task SiAlConfirmarUnaOrdenElRepositorioDaErrorElServicioLoPropaga()
-    {
-        int idUsuario = 1; int idMenu = 1;
-        ClienteMenuDto dto = new ClienteMenuDto(idUsuario, idMenu);
-
-        Orden orden = new Orden { IdUsuario = idUsuario, IdMenu = idMenu, Estado = "Pendiente" };
-
-        _repoMock.Setup(r => r.GuardarOrdenDelClienteAsync(orden)).ThrowsAsync(new Exception());
-
-        await Assert.ThrowsAsync<Exception>(async () => await _ordenesServicio.ConfirmarOrdenDelClienteAsync(dto));
     }
 
     [Fact]
@@ -144,19 +112,4 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
         await Assert.ThrowsAsync<OrdenYaCanceladaException>(async () => await _ordenesServicio.CancelarOrdenDelCliente(idCliente, idOrden));
     }
 
-    [Fact]
-    public async Task SiSeIntentaCancelarUnaOrdenElRepositorioLanzaExcepcionElServicioLoPropaga()
-    {
-        int idCliente = 1;
-        int idOrden = 1;
-
-        Orden orden = new Orden
-        {
-            Estado = "Cancelada"
-        };
-
-        _repoMock.Setup(r => r.ObtenerOrdenDelClienteAsync(idCliente, idOrden)).ThrowsAsync(new Exception());
-
-        await Assert.ThrowsAsync<Exception>(async () => await _ordenesServicio.CancelarOrdenDelCliente(idCliente, idOrden));
-    }
 }

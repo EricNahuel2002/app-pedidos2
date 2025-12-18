@@ -33,7 +33,7 @@ public class OrdenesController : Controller
                 return Unauthorized();
             }
             var resultado = await _ordenServicio.CancelarOrdenDelCliente(int.Parse(idCliente), dto.IdOrden);
-            return Ok(resultado);
+            return Ok(new { mensaje = resultado});
         }
         catch(Exception e)
         {
@@ -53,7 +53,7 @@ public class OrdenesController : Controller
             }
             ClienteMenuDto dto = new ClienteMenuDto(int.Parse(idUsuario), idMenu);
             var resultado = await _ordenServicio.ConfirmarOrdenDelClienteAsync(dto);
-            return StatusCode(201, resultado);
+            return StatusCode(201, new {menasaje = resultado});
         }
         catch(Exception e)
         {
@@ -75,7 +75,7 @@ public class OrdenesController : Controller
             int idUsuario = int.Parse(id);
             
             var resultado = await _ordenServicio.ObtenerOrdenesDelClienteAsync(idUsuario);
-            return Ok(resultado);
+            return Ok(new {mensaje = resultado });
         }
         catch(Exception e)
         {

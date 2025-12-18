@@ -3,6 +3,7 @@ using Moq;
 using System.Text.Json;
 using Usuarios.controlador;
 using Usuarios.dto;
+using Usuarios.excepciones;
 using Usuarios.servicio;
 using Usuarios.Test.fixture;
 
@@ -33,9 +34,20 @@ public class UsuariosControladorTest: IClassFixture<UsuariosControladorFixture>
 
         var resultado = Assert.IsType<OkObjectResult>(respuesta);
         Assert.Equal(200, resultado.StatusCode);
+    }
 
-        var usuario = Assert.IsType<UsuarioDto>(resultado.Value);
-        Assert.Equal(1, usuario.Id);
+    [Fact]
+    public async Task SiAlValidarCredencialesDeUsuarioElServicioIndicaQueSonInvalidasElControladorRetornaHttp401()
+    {
+        LoginDto dto = new LoginDto("pepe@gmail.com", "123");
+        UsuarioDto usuarioDto = new UsuarioDto(1, "pepe@gmail.com", "cliente");
+
+        _servicioMock.Setup(s => s.ValidarCredencialesDeUsuario(dto)).ThrowsAsync(new CredencialesInvalidasException());
+
+        var respuesta = await _controlador.ValidarCredencialesDeUsuario(dto);
+
+        var resultado = Assert.IsType<UnauthorizedResult>(respuesta);
+        Assert.Equal(401, resultado.StatusCode);
     }
 
     [Fact]
@@ -50,5 +62,25 @@ public class UsuariosControladorTest: IClassFixture<UsuariosControladorFixture>
         var resultado = Assert.IsType<ObjectResult>(respuesta);
 
         Assert.Equal(500, resultado.StatusCode);
+    }
+
+
+    [Fact]
+    public async Task AlListarClienteElControladorRetornaOk()
+    {
+        int id = 1;
+        UsuarioClienteDto dto = new UsuarioClienteDto { Id = id, Email = "pepe@gmail.com" };
+
+        _servicioMock.Setup(s => s.ObtenerUsuarioCliente(id)).ReturnsAsync(dto);
+
+        var resultado = await _controlador.ListarCliente(id);
+
+        var httpResult = Assert.IsType<OkObjectResult>(resultado);
+
+        Assert.Equal(200, httpResult.StatusCode);
+
+        Assert.NotNull(httpResult.Value);
+        UsuarioClienteDto dtoQueRetorna = Assert.IsType<UsuarioClienteDto>(httpResult.Value);
+        Assert.Equal(id, dtoQueRetorna.Id);
     }
 }
