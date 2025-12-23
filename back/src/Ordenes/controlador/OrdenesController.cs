@@ -159,7 +159,7 @@ public class OrdenesController : Controller
             int idUsuario = int.Parse(id);
 
             var resultado = await _ordenServicio.ObtenerOrdenesTomadasDelRepartidorAsync(idUsuario);
-            return Ok(new { mensaje = resultado });
+            return Ok(resultado);
         }
         catch (Exception e)
         {

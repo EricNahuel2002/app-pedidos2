@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="card shadow-sm">
     <div class="card-header bg-primary text-white">
-      <h3 class="mb-0">Ordenes con estado pendiente</h3>
+      <h3 class="mb-0">Ordenes tomadas</h3>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -40,12 +40,21 @@
                 {{ orden.estado }}
               </span>
               <td class="text-center">
-                <button 
-                  class="btn btn-success btn-sm d-flex align-items-center gap-1 mx-auto"
-                  (click)="tomarOrden(orden.idOrden)"
+                @if(orden.estado === 'EN CURSO'){
+                    <button 
+                  class="btn btn-primary btn-sm d-flex align-items-center gap-1 mx-auto"
+                  (click)="finalizarOrden(orden.idOrden)"
                 >
-                  <i class="bi bi-check-circle"></i> Tomar Orden
+                  <i class="bi bi-check-circle"></i> Finalizar orden
                 </button>
+                }@else {
+                    <button 
+                  class="btn btn-danger btn-sm d-flex align-items-center gap-1 mx-auto"
+                  (click)="verOrden(orden.idOrden)"
+                >
+                  <i class="bi bi-check-circle"></i> Ver orden
+                </button>
+                }
               </td>
             </tr>
             }

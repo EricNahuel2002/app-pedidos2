@@ -1,16 +1,16 @@
 import { CurrencyPipe, NgClass } from '@angular/common';
-import { Component ,OnInit, signal, computed, effect, inject } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Orden } from '@interfaces/orden.interface';
 import { OrdenService } from '@servicios/orden/orden.service';
 import { MessageService } from 'primeng/api';
-@Component({
-  selector: 'app-repartidor',
-  imports: [CurrencyPipe,NgClass],
-  templateUrl: './repartidor.html',
-  styleUrl: './repartidor.css',
-})
-export class Repartidor implements OnInit {
 
+@Component({
+  selector: 'app-repartidor-ordenes-tomadas',
+  imports: [CurrencyPipe,NgClass],
+  templateUrl: './repartidor-ordenes-tomadas.html',
+  styleUrl: './repartidor-ordenes-tomadas.css',
+})
+export class RepartidorOrdenesTomadas implements OnInit{
   ordenes = signal<Orden[]>([]);
 
   ordenesListadas = computed(()=> {
@@ -25,7 +25,7 @@ export class Repartidor implements OnInit {
   }
 
   cargarOrdenes(): void {
-    this.ordenService.obtenerOrdenesPendientes().subscribe(
+    this.ordenService.obtenerOrdenesTomadasPorRepartidor().subscribe(
       {
         next: (data) => this.ordenes.set(data),
         error : (err) => console.log(err)
@@ -33,14 +33,15 @@ export class Repartidor implements OnInit {
     );
   }
 
-  tomarOrden(id: number): void {
 
-    this.ordenService.tomarOrdenDelCliente(id).subscribe({
+  finalizarOrden(id: number): void {
+
+    this.ordenService.finalizarOrden(id).subscribe({
       next: (data) => {
           this.cargarOrdenes();
           this.messageService.add({
           severity: 'success',
-          summary: 'Orden en curso',
+          summary: 'Orden finalizada',
           detail: `${data}`
         });
 
@@ -48,10 +49,14 @@ export class Repartidor implements OnInit {
       error : (err) => {
         this.messageService.add({
           severity: 'danger',
-          summary: 'Hubo un error al tomar la orden',
+          summary: 'Hubo un error al finalizar la orden',
           detail: `${err}`
         });
       }
     });
+  }
+
+  verOrden(id:number){
+    
   }
 }

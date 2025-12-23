@@ -38,4 +38,20 @@ export class OrdenService {
         }
     );
   }
+
+  tomarOrdenDelCliente(id:number){
+      return this.http.get(`${environment.BACKEND_URL}/ordenes/tomarOrden/${id}`,{withCredentials:true,responseType: 'text' as 'json' });
+  }
+
+  obtenerOrdenesTomadasPorRepartidor(): Observable<Orden[]> {
+    return this.http.get<Orden[]>(
+      `${environment.BACKEND_URL}/ordenes/repartidor`,
+      { withCredentials: true }
+    );
+  }
+  
+
+  finalizarOrden(id:number){
+    return this.http.patch(`${environment.BACKEND_URL}/ordenes/marcarOrdenFinalizada`,id,{withCredentials : true, responseType: 'text' as 'json'})
+  }
 }

@@ -42,5 +42,12 @@ export const routes: Routes = [
         .then(c => c.Repartidor),
         canActivate : [authGuard],
         data : { roles:['repartidor']}
+    },
+    {
+        path : 'ordenes-tomadas',
+        loadComponent : () => import("@componentes/repartidor-ordenes-tomadas/repartidor-ordenes-tomadas")
+        .then(c => c.RepartidorOrdenesTomadas),
+        canActivate : [authGuard],
+        data: {roles:['repartidor']}
     }
 ];
