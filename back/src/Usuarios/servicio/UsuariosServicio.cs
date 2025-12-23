@@ -8,6 +8,7 @@ namespace Usuarios.servicio;
 public interface IUsuariosServicio
 {
     Task<UsuarioClienteDto> ObtenerUsuarioCliente(int id);
+    Task<UsuarioRepartidorDto> ObtenerUsuarioRepartidor(int id);
     Task<UsuarioDto> ValidarCredencialesDeUsuario(LoginDto dto);
 }
 public class UsuariosServicio : IUsuariosServicio
@@ -41,6 +42,28 @@ public class UsuariosServicio : IUsuariosServicio
 
         return dto;
 
+    }
+
+    public async Task<UsuarioRepartidorDto> ObtenerUsuarioRepartidor(int id)
+    {
+        Usuario usuario = await _usuarioRepo.ObtenerUsuarioPorId(id);
+
+        if (usuario == null)
+            throw new KeyNotFoundException($"No se encontró el usuario con id {id}");
+        if (usuario.Repartidor == null)
+            throw new InvalidOperationException($"El usuario {usuario.Id} no tiene un repartidor asociado");
+
+        UsuarioRepartidorDto dto = new UsuarioRepartidorDto()
+        {
+            Id = usuario.Id,
+            Nombre = usuario.Nombre,
+            Email = usuario.Email,
+            Dni = usuario.Repartidor.Dni,
+            FotoDniUrl = usuario.Repartidor.FotoDniUrl,
+            Verificado = usuario.Repartidor.Verificado
+        };
+
+        return dto;
     }
 
     public async Task<UsuarioDto> ValidarCredencialesDeUsuario(LoginDto dto)

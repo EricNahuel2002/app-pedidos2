@@ -8,6 +8,7 @@ import { MenuItem } from 'primeng/api';
 import { MenuItemContent } from 'primeng/menu';
 import { MessageService } from 'primeng/api';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class Ordenes implements OnInit{
     ordenService = inject(OrdenService);
     usuarioService = inject(UsuarioService);
     messageService = inject(MessageService)
+    router = inject(Router);
 
 
     ordenes = signal<Orden[]>([]);
@@ -37,7 +39,9 @@ export class Ordenes implements OnInit{
 
       this.ordenService.obtenerOrdenesDelCliente().subscribe({
         next: (data) => this.ordenes.set(data),
-        error : (err) => console.log("ERROR AL OBTENER ORDENES DEL CLIENTE",err)
+        error : (err) => {
+          console.log(err);
+        }
       })
     }
 

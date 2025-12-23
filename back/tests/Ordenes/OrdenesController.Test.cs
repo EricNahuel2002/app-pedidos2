@@ -29,8 +29,8 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
         int idCliente = 1;
         var ordenesEsperadas = new List<Orden>
         {
-            new Orden{ IdOrden = 1 ,IdUsuario = idCliente, IdMenu = 1, NombreCliente = "pepe", PrecioAPagar = 50},
-            new Orden{ IdOrden = 2 ,IdUsuario = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
+            new Orden{ IdOrden = 1 ,IdCliente = idCliente, IdMenu = 1, NombreCliente = "pepe", PrecioAPagar = 50},
+            new Orden{ IdOrden = 2 ,IdCliente = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
         };
 
         var claims = new List<Claim>
@@ -66,8 +66,8 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
         int idCliente = 1;
         var ordenesEsperadas = new List<Orden>
         {
-            new Orden{ IdOrden = 1 ,IdUsuario = idCliente, IdMenu = 1, NombreCliente = "pepe", PrecioAPagar = 50},
-            new Orden{ IdOrden = 2 ,IdUsuario = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
+            new Orden{ IdOrden = 1 ,IdCliente = idCliente, IdMenu = 1, NombreCliente = "pepe", PrecioAPagar = 50},
+            new Orden{ IdOrden = 2 ,IdCliente = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
         };
 
         var claims = new List<Claim>
@@ -104,8 +104,8 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
         int idCliente = 1;
         var ordenesEsperadas = new List<Orden>
         {
-            new Orden{ IdOrden = 1 ,IdUsuario = idCliente, IdMenu = 1, NombreCliente = "pepe", PrecioAPagar = 50},
-            new Orden{ IdOrden = 2 ,IdUsuario = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
+            new Orden{ IdOrden = 1 ,IdCliente = idCliente, IdMenu = 1, NombreCliente = "pepe", PrecioAPagar = 50},
+            new Orden{ IdOrden = 2 ,IdCliente = idCliente, IdMenu = 3, NombreCliente = "pepe", PrecioAPagar = 30}
         };
 
         var claims = new List<Claim>
@@ -143,7 +143,6 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
     {
         int idCliente = 1;
         int idMenu = 1;
-        ClienteMenuDto dto = new ClienteMenuDto(idCliente,idMenu);
 
         var claims = new List<Claim>
         {
@@ -162,7 +161,7 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
             }
         };
 
-        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(dto)).ReturnsAsync("Orden confirmada");
+        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(idCliente,idMenu)).ReturnsAsync("Orden confirmada");
 
         var respuesta = await ordenController.ConfirmarOrdenDelClienteAsync(idMenu);
 
@@ -179,7 +178,6 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
         string rol = "cliente";
         int idMenu = 1;
 
-        ClienteMenuDto dto = new ClienteMenuDto(idCliente, idMenu);
 
         var claims = new List<Claim>
         {
@@ -197,7 +195,7 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
             }
         };
 
-        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(dto));
+        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(idCliente,idMenu));
 
         var resultado = await ordenController.ConfirmarOrdenDelClienteAsync(idMenu);
 
@@ -216,7 +214,6 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
     {
         int idCliente = 1;
         int idMenu = 1;
-        ClienteMenuDto dto = new ClienteMenuDto(idCliente, idMenu); ;
 
         var claims = new List<Claim>
         {
@@ -235,7 +232,7 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
             }
         };
 
-        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(dto)).ThrowsAsync(new Exception());
+        ordenServicioMock.Setup(s => s.ConfirmarOrdenDelClienteAsync(idCliente,idMenu)).ThrowsAsync(new Exception());
 
         var respuesta = await ordenController.ConfirmarOrdenDelClienteAsync(idMenu);
 

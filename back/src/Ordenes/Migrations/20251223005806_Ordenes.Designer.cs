@@ -12,7 +12,7 @@ using Ordenes.contexto;
 namespace Ordenes.Migrations
 {
     [DbContext(typeof(OrdenesDbContext))]
-    [Migration("20251216225739_Ordenes")]
+    [Migration("20251223005806_Ordenes")]
     partial class Ordenes
     {
         /// <inheritdoc />
@@ -38,6 +38,10 @@ namespace Ordenes.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<string>("DniRepartidor")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
                     b.Property<string>("EmailCliente")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -45,22 +49,35 @@ namespace Ordenes.Migrations
 
                     b.Property<string>("Estado")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("PENDIENTE");
 
                     b.Property<DateTime>("FechaOrden")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
 
                     b.Property<int>("IdMenu")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdUsuario")
+                    b.Property<int?>("IdRepartidor")
                         .HasColumnType("int");
 
                     b.Property<string>("NombreCliente")
                         .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("NombreMenu")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NombreRepartidor")
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
@@ -69,7 +86,7 @@ namespace Ordenes.Migrations
 
                     b.HasKey("IdOrden");
 
-                    b.ToTable("Ordenes");
+                    b.ToTable("Ordenes", (string)null);
                 });
 #pragma warning restore 612, 618
         }

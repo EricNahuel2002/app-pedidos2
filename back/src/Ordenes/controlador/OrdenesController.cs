@@ -51,8 +51,7 @@ public class OrdenesController : Controller
             {
                 return Unauthorized();
             }
-            ClienteMenuDto dto = new ClienteMenuDto(int.Parse(idUsuario), idMenu);
-            var resultado = await _ordenServicio.ConfirmarOrdenDelClienteAsync(dto);
+            var resultado = await _ordenServicio.ConfirmarOrdenDelClienteAsync(int.Parse(idUsuario),idMenu);
             return StatusCode(201, new {menasaje = resultado});
         }
         catch(Exception e)
@@ -75,11 +74,96 @@ public class OrdenesController : Controller
             int idUsuario = int.Parse(id);
             
             var resultado = await _ordenServicio.ObtenerOrdenesDelClienteAsync(idUsuario);
-            return Ok(new {mensaje = resultado });
+            return Ok(resultado);
         }
         catch(Exception e)
         {
             return StatusCode(500,e.Message);
+        }
+    }
+
+
+    [HttpGet("ordenesPendientes")]
+    public async Task<IActionResult> ListarOrdenesPendientes()
+    {
+        try
+        {
+            var ordenesPendientes = await _ordenServicio.ObtenerOrdenesPendientes();
+            return Ok(ordenesPendientes);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+
+    [HttpGet("tomarOrden/{idOrden}")]
+    public async Task<IActionResult> TomarUnaOrden(int idOrden)
+    {
+        try
+        {
+
+            var idUsuario = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+            if (idUsuario == null)
+            {
+                return Unauthorized();
+            }
+
+            var resultado = await _ordenServicio.TomarUnaOrden(int.Parse(idUsuario), idOrden);
+            return Ok(resultado);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+
+    [HttpPatch("marcarOrdenFinalizada")]
+    public async Task<IActionResult> MarcarOrdenComoFinalizada([FromBody] int idOrden)
+    {
+        try
+        {
+
+            var idUsuario = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+            if (idUsuario == null)
+            {
+                return Unauthorized();
+            }
+
+            var resultado = await _ordenServicio.MarcarOrdenComoFinalizada(int.Parse(idUsuario), idOrden);
+            return Ok(resultado);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+
+    [HttpGet("repartidor")]
+    public async Task<IActionResult> ListarOrdenesTomadasDelRepartidorAsync()
+    {
+        try
+        {
+            var id = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+            if (id == null)
+            {
+                return Unauthorized();
+            }
+
+            int idUsuario = int.Parse(id);
+
+            var resultado = await _ordenServicio.ObtenerOrdenesTomadasDelRepartidorAsync(idUsuario);
+            return Ok(new { mensaje = resultado });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Ordenes.Entidad
         public int IdOrden { get; set; }
 
         [Required]
-        public int IdUsuario { get; set; }
+        public int IdCliente { get; set; }
         [Required]
         public int IdMenu { get; set; }
         [Required]
@@ -27,11 +27,14 @@ namespace Ordenes.Entidad
 
         [Required]
         [MaxLength(50)]
-        public string Estado { get; set; } = "pendiente";
+        public string Estado { get; set; } = "PENDIENTE";
 
         [MaxLength(500)]
         [Required]
         public string Direccion { get; set; } = null!;
+        public int? IdRepartidor { get; set; }
+        public string? NombreRepartidor { get; set; } = null!;
+        public string? DniRepartidor { get; set; } = null!;
         public DateTime FechaOrden { get; set; } = DateTime.UtcNow;
     }
 }

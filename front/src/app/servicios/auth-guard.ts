@@ -8,10 +8,25 @@ export const authGuard: CanActivateFn = (route, state) => {
   const usuarioService = inject(UsuarioService);
   const router = inject(Router);
 
+  const rolesPermitidos = route.data?.['roles'] as string[] | undefined;
+
   return usuarioService.checkAuthStatus().pipe(
-    map(isAuth => 
-      isAuth ? true:
-      router.createUrlTree(['/iniciar-sesion'],{queryParams : {returnUrl : state.url}}))
-    );
+      map((credenciales) => {
+        if(!credenciales){
+          return router.createUrlTree(['/iniciar-sesion'],{
+            queryParams : {returnUrl : state.url}
+          })
+        }
+
+        if(rolesPermitidos && !rolesPermitidos.includes(credenciales.rol)){
+            console.log("No tenes permisos para acceder a la vista")
+            return router.createUrlTree(['/'],{
+              queryParams: {returnUrl: state.url}
+            })
+        }
+        return true;
+      })
+    ) 
+  
   
 };

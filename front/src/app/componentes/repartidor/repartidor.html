@@ -1,1 +1,53 @@
-<p>repartidor works!</p>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Gestión de Órdenes</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Email</th>
+              <th>Menú</th>
+              <th>Dirección</th>
+              <th>Precio</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (orden of ordenes(); track orden.idOrden) {
+              <tr>
+              <td><strong>#{{ orden.idOrden }}</strong></td>
+              <td>{{ orden.nombreCliente }}</td>
+              <td><small>{{ orden.emailCliente }}</small></td>
+              <td>{{ orden.nombreMenu }}</td>
+              <td>{{ orden.direccion }}</td>
+              <td>{{ orden.precioAPagar | currency }}</td>
+              <td class="text-center">
+                <button 
+                  class="btn btn-success btn-sm d-flex align-items-center gap-1 mx-auto"
+                  (click)="tomarOrden(orden.idOrden)"
+                  [disabled]="orden.estado !== 'pendiente'" 
+                >
+                  <i class="bi bi-check-circle"></i> Tomar Orden
+                </button>
+              </td>
+            </tr>
+            }
+            @if(ordenes.length === 0){
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">
+                No hay órdenes disponibles en este momento.
+              </td>
+            </tr>
+            }
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

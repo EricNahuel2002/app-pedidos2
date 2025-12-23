@@ -21,6 +21,8 @@ public class UsuariosRepositorio: IUsuariosRepositorio
     public async Task<Usuario> ObtenerUsuarioPorEmail(string email)
     {
         return await _ctx.Usuarios.Where(u => u.Email.Equals(email))
+            .Include(u => u.Cliente)
+            .Include(u => u.Repartidor)
             .Include(u => u.UsuarioRoles)
             .ThenInclude(ur => ur.Rol)
             .FirstOrDefaultAsync();
@@ -29,6 +31,7 @@ public class UsuariosRepositorio: IUsuariosRepositorio
     public async Task<Usuario> ObtenerUsuarioPorId(int id)
     {
         return await _ctx.Usuarios.Where(u => u.Id == id)
+            .Include(u => u.Repartidor)
             .Include(u => u.Cliente)
             .FirstOrDefaultAsync();
     }

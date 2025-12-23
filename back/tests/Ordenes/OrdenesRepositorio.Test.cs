@@ -35,7 +35,7 @@ public class OrdenesRepositorioTest: IClassFixture<OrdenesRepositorioFixture>
             {
                 IdOrden = 1,
                 IdMenu = 1,
-                IdUsuario = 1,
+                IdCliente = 1,
                 Estado = "Pendiente",
                 Direccion = "saraza",
                 EmailCliente = "saraza",
@@ -48,7 +48,7 @@ public class OrdenesRepositorioTest: IClassFixture<OrdenesRepositorioFixture>
             {
                 IdOrden = 2,
                 IdMenu = 2,
-                IdUsuario = 1,
+                IdCliente = 1,
                 Estado = "Pendiente",
                 Direccion = "saraza",
                 EmailCliente = "saraza",
@@ -82,7 +82,7 @@ public class OrdenesRepositorioTest: IClassFixture<OrdenesRepositorioFixture>
             {
                 IdOrden = 1,
                 IdMenu = 1,
-                IdUsuario = 1,
+                IdCliente = 1,
                 Estado = "Pendiente",
                 Direccion = "saraza",
                 EmailCliente = "saraza",
@@ -115,7 +115,7 @@ public class OrdenesRepositorioTest: IClassFixture<OrdenesRepositorioFixture>
             ctx.Database.EnsureCreated();
             ctx.Database.EnsureDeleted();
 
-            Orden orden = new Orden { IdOrden = 1, IdMenu = 1, IdUsuario = 1,
+            Orden orden = new Orden { IdOrden = 1, IdMenu = 1, IdCliente = 1,
                 Estado = "Pendiente" ,Direccion = "saraza", EmailCliente = "saraza",
                 NombreCliente = "saraza", NombreMenu = "saraza", PrecioAPagar = 5, FechaOrden = DateTime.Now};
 
@@ -129,7 +129,7 @@ public class OrdenesRepositorioTest: IClassFixture<OrdenesRepositorioFixture>
             {
                 IdOrden = 1,
                 IdMenu = 1,
-                IdUsuario = 1,
+                IdCliente = 1,
                 Estado = "Cancelada",
                 Direccion = "saraza",
                 EmailCliente = "saraza",
@@ -164,7 +164,7 @@ public class OrdenesRepositorioTest: IClassFixture<OrdenesRepositorioFixture>
             {
                 IdOrden = 1,
                 IdMenu = 1,
-                IdUsuario = 1,
+                IdCliente = 1,
                 Estado = "Cancelada",
                 Direccion = "saraza",
                 EmailCliente = "saraza",
@@ -179,7 +179,7 @@ public class OrdenesRepositorioTest: IClassFixture<OrdenesRepositorioFixture>
         }
         using (var ctx = new OrdenesDbContext(_ctx))
         {
-            Orden? orden = await ctx.Ordenes.Where(o => o.IdUsuario == 1 && o.IdOrden == 1).FirstOrDefaultAsync();
+            Orden? orden = await ctx.Ordenes.Where(o => o.IdCliente == 1 && o.IdOrden == 1).FirstOrDefaultAsync();
 
             Assert.NotNull(orden);
             Assert.Equal(1, orden.IdOrden);

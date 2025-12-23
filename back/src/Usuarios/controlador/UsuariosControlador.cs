@@ -23,8 +23,8 @@ namespace Usuarios.controlador
         {
             try
             {
-                var usuario = await _usuarioServicio.ValidarCredencialesDeUsuario(dto);
-                return Ok(usuario);
+                var resultado = await _usuarioServicio.ValidarCredencialesDeUsuario(dto);
+                return Ok(resultado);
             }
             catch (CredencialesInvalidasException)
             {
@@ -42,9 +42,23 @@ namespace Usuarios.controlador
         {
             try
             {
-                UsuarioClienteDto dto = await _usuarioServicio.ObtenerUsuarioCliente(id);
-                return Ok(dto);
+                var resultado = await _usuarioServicio.ObtenerUsuarioCliente(id);
+                return Ok(resultado);
             }catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("repartidor/{id}")]
+        public async Task<IActionResult> ListarRepartidor(int id)
+        {
+            try
+            {
+                var resultado = await _usuarioServicio.ObtenerUsuarioRepartidor(id);
+                return Ok(resultado);
+            }
+            catch (Exception e)
             {
                 return StatusCode(500, e.Message);
             }

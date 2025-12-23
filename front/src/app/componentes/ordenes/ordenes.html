@@ -32,9 +32,10 @@
               <span 
                 class="badge px-3 py-2"
                 [ngClass]="{
-                  'bg-warning text-dark': orden.estado === 'pendiente',
-                  'bg-success': orden.estado === 'confirmada',
-                  'bg-danger': orden.estado === 'cancelada'
+                  'bg-warning text-dark': orden.estado === 'PENDIENTE',
+                  'bg-primary': orden.estado === 'EN CURSO',
+                  'bg-danger': orden.estado === 'CANCELADA',
+                  'bg-success' : orden.estado === 'FINALIZADA'
                 }"
               >
                 {{ orden.estado }}

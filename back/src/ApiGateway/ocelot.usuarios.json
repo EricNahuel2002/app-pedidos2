@@ -35,6 +35,18 @@
           "Port": 5000
         }
       ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/usuarios/repartidor/{id}",
+      "DownstreamPathTemplate": "/api/usuarios/repartidor/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ]
     }
   ]
 }

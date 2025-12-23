@@ -3,7 +3,7 @@
 public class Repartidor
 {
     public int IdUsuario { get; set; }
-    public int Dni { get; set; }
+    public string Dni { get; set; } = null!;
     public string FotoDniUrl { get; set; } = null!;
     public bool Verificado { get; set; }
 

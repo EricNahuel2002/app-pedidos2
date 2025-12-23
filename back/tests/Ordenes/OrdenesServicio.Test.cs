@@ -31,7 +31,7 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
         int idUsuario = 1;
         List<Orden> ordenes = new List<Orden>
         {
-            new Orden{ IdOrden = 1, IdUsuario = idUsuario, IdMenu = 1, NombreCliente = "Eric"
+            new Orden{ IdOrden = 1, IdCliente = idUsuario, IdMenu = 1, NombreCliente = "Eric"
             , EmailCliente = "ericaquino2002@gmail.com", Direccion = "Lamadrid",
                 PrecioAPagar = 50, Estado = "Pendiente", FechaOrden = DateTime.UtcNow}
         };
@@ -48,13 +48,12 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
     public async Task QueElClientePuedaConfirmarUnaOrden()
     {
         int idUsuario = 1; int idMenu = 1;
-        ClienteMenuDto dto = new ClienteMenuDto(idUsuario, idMenu);
 
-        Orden orden = new Orden { IdUsuario = idUsuario, IdMenu = idMenu, Estado = "Pendiente" };
+        Orden orden = new Orden { IdCliente = idUsuario, IdMenu = idMenu, Estado = "Pendiente" };
 
         _repoMock.Setup(r => r.GuardarOrdenDelClienteAsync(orden));
 
-        var resultado = await _ordenesServicio.ConfirmarOrdenDelClienteAsync(dto);
+        var resultado = await _ordenesServicio.ConfirmarOrdenDelClienteAsync(idUsuario,idMenu);
 
         Assert.Equal("Orden confirmada", resultado);
     }
@@ -67,14 +66,16 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
 
         Orden orden = new Orden
         {
-            Estado = "Pendiente"
+            Estado = "PENDIENTE"
         };
 
         _repoMock.Setup(r => r.ObtenerOrdenDelClienteAsync(idCliente, idOrden)).ReturnsAsync(orden);
 
-        _repoMock.Setup(r => r.CancelarOrdenAsync(orden));
+        _repoMock.Setup(r => r.ActualizarEstadoDeOrden(orden));
 
         var resultado = await _ordenesServicio.CancelarOrdenDelCliente(idCliente, idOrden);
+
+        Assert.Equal("CANCELADA", orden.Estado);
 
         Assert.Equal("Orden cancelada", resultado);
     }

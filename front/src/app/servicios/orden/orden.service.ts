@@ -13,7 +13,7 @@ export class OrdenService {
   
   
   ConfirmarOrden(idMenu: number) {
-    return this.http.post(`${environment.BACKEND_URL}/ordenes/confirmarOrden`,{idMenu},{ withCredentials: true, responseType: 'text' as 'json' });
+    return this.http.get(`${environment.BACKEND_URL}/ordenes/confirmarOrden/${idMenu}`,{ withCredentials: true, responseType: 'text' as 'json' });
   }
   
   obtenerOrdenesDelCliente():Observable<Orden[]> {
@@ -21,10 +21,17 @@ export class OrdenService {
     return this.http.get<Orden[]>(`${environment.BACKEND_URL}/ordenes/cliente`,{withCredentials: true}); 
   }
 
+  obtenerOrdenesPendientes(): Observable<Orden[]> {
+    return this.http.get<Orden[]>(
+      `${environment.BACKEND_URL}/ordenes/ordenesPendientes`,
+      { withCredentials: true }
+    );
+  }
+
   cancelarOrden(idOrden:number){
     return this.http.patch(
-        `${environment.BACKEND_URL}/ordenes/cancelar/${idOrden}`, 
-        null,
+        `${environment.BACKEND_URL}/ordenes/cancelar`, 
+        {idOrden},
         { 
             responseType: 'text',
             withCredentials : true
