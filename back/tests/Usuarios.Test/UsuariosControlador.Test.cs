@@ -83,4 +83,84 @@ public class UsuariosControladorTest: IClassFixture<UsuariosControladorFixture>
         UsuarioClienteDto dtoQueRetorna = Assert.IsType<UsuarioClienteDto>(httpResult.Value);
         Assert.Equal(id, dtoQueRetorna.Id);
     }
+
+    [Fact]
+    public async Task AlRegistrarUnClienteElControladorRetornaHttp201()
+    {
+        RegistrarClienteDto dto = new RegistrarClienteDto
+        {
+            Nombre = "Ana",
+            Email = "ana@gmail.com",
+            Contrasenia = "123456",
+            Direccion = "Calle 1",
+            Telefono = "112233"
+        };
+
+        _servicioMock.Setup(s => s.RegistrarClienteAsync(dto)).Returns(Task.CompletedTask);
+
+        var resultado = await _controlador.RegistrarCliente(dto);
+
+        var objectResult = Assert.IsType<ObjectResult>(resultado);
+        Assert.Equal(201, objectResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task SiAlRegistrarUnClienteElEmailYaExisteElControladorRetornaHttp409()
+    {
+        RegistrarClienteDto dto = new RegistrarClienteDto
+        {
+            Nombre = "Ana",
+            Email = "ana@gmail.com",
+            Contrasenia = "123456",
+            Direccion = "Calle 1",
+            Telefono = "112233"
+        };
+
+        _servicioMock.Setup(s => s.RegistrarClienteAsync(dto)).ThrowsAsync(new EmailYaRegistradoException());
+
+        var resultado = await _controlador.RegistrarCliente(dto);
+
+        var conflict = Assert.IsType<ConflictObjectResult>(resultado);
+        Assert.Equal(409, conflict.StatusCode);
+    }
+
+    [Fact]
+    public async Task AlRegistrarUnRepartidorElControladorRetornaHttp201()
+    {
+        RegistrarRepartidorDto dto = new RegistrarRepartidorDto
+        {
+            Nombre = "Luis",
+            Email = "luis@gmail.com",
+            Contrasenia = "123456",
+            Dni = "40123456",
+            Direccion = "Calle 2"
+        };
+
+        _servicioMock.Setup(s => s.RegistrarRepartidorAsync(dto)).Returns(Task.CompletedTask);
+
+        var resultado = await _controlador.RegistrarRepartidor(dto);
+
+        var objectResult = Assert.IsType<ObjectResult>(resultado);
+        Assert.Equal(201, objectResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task SiAlRegistrarUnRepartidorElEmailYaExisteElControladorRetornaHttp409()
+    {
+        RegistrarRepartidorDto dto = new RegistrarRepartidorDto
+        {
+            Nombre = "Luis",
+            Email = "luis@gmail.com",
+            Contrasenia = "123456",
+            Dni = "40123456",
+            Direccion = "Calle 2"
+        };
+
+        _servicioMock.Setup(s => s.RegistrarRepartidorAsync(dto)).ThrowsAsync(new EmailYaRegistradoException());
+
+        var resultado = await _controlador.RegistrarRepartidor(dto);
+
+        var conflict = Assert.IsType<ConflictObjectResult>(resultado);
+        Assert.Equal(409, conflict.StatusCode);
+    }
 }
