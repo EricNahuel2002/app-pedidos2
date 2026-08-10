@@ -88,7 +88,7 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
 
         Orden orden = new Orden
         {
-            Estado = "En curso"
+            Estado = "EN CURSO"
         };
 
         _repoMock.Setup(r => r.ObtenerOrdenDelClienteAsync(idCliente, idOrden)).ReturnsAsync(orden);
@@ -105,7 +105,7 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
 
         Orden orden = new Orden
         {
-            Estado = "Cancelada"
+            Estado = "CANCELADA"
         };
 
         _repoMock.Setup(r => r.ObtenerOrdenDelClienteAsync(idCliente, idOrden)).ReturnsAsync(orden);

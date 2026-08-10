@@ -110,7 +110,7 @@ public class OrdenesTest: IClassFixture<OrdenesControllerFixture>
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, idCliente.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, idCliente.ToString()),
             new Claim(ClaimTypes.Role,"cliente")
         };
 

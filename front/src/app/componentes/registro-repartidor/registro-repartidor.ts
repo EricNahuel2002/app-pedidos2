@@ -32,9 +32,9 @@ export class RegistroRepartidor {
 
     onSubmit():void{
       if(this.registroForm.valid){
-        const {email,nombre,dni,contrasenia,direccion,telefono} = this.registroForm.value;
+        const {email,nombre,dni,password,direccion} = this.registroForm.value;
 
-        this.usuarioService.registrarRepartidor(nombre,email,dni,contrasenia,direccion).subscribe({
+        this.usuarioService.registrarRepartidor(nombre,email,password,dni,direccion).subscribe({
           next: (data) => this.router.navigate(['/iniciar-sesion']),
           error: (err) => console.log("ERROR AL REGISTRARSE")
         })

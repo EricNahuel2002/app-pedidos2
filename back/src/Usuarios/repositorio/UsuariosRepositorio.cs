@@ -8,6 +8,8 @@ public interface IUsuariosRepositorio
 {
     Task<Usuario> ObtenerUsuarioPorEmail(string email);
     Task<Usuario> ObtenerUsuarioPorId(int id);
+    Task<Rol> ObtenerRolPorNombre(string nombre);
+    Task<Usuario> GuardarUsuarioAsync(Usuario usuario);
 }
 public class UsuariosRepositorio: IUsuariosRepositorio
 {
@@ -34,5 +36,17 @@ public class UsuariosRepositorio: IUsuariosRepositorio
             .Include(u => u.Repartidor)
             .Include(u => u.Cliente)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Rol> ObtenerRolPorNombre(string nombre)
+    {
+        return await _ctx.Roles.Where(r => r.Nombre.Equals(nombre)).FirstOrDefaultAsync();
+    }
+
+    public async Task<Usuario> GuardarUsuarioAsync(Usuario usuario)
+    {
+        _ctx.Usuarios.Add(usuario);
+        await _ctx.SaveChangesAsync();
+        return usuario;
     }
 }

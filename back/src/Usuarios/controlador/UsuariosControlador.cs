@@ -36,6 +36,42 @@ namespace Usuarios.controlador
             }
         }
 
+        [HttpPost("registrarCliente")]
+        public async Task<IActionResult> RegistrarCliente(RegistrarClienteDto dto)
+        {
+            try
+            {
+                await _usuarioServicio.RegistrarClienteAsync(dto);
+                return StatusCode(201, new { mensaje = "Cliente registrado correctamente" });
+            }
+            catch (EmailYaRegistradoException)
+            {
+                return Conflict(new { mensaje = "El email ya se encuentra registrado" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno");
+            }
+        }
+
+        [HttpPost("registrarRepartidor")]
+        public async Task<IActionResult> RegistrarRepartidor(RegistrarRepartidorDto dto)
+        {
+            try
+            {
+                await _usuarioServicio.RegistrarRepartidorAsync(dto);
+                return StatusCode(201, new { mensaje = "Repartidor registrado correctamente" });
+            }
+            catch (EmailYaRegistradoException)
+            {
+                return Conflict(new { mensaje = "El email ya se encuentra registrado" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno");
+            }
+        }
+
 
         [HttpGet("cliente/{id}")]
         public async Task<IActionResult> ListarCliente(int id)

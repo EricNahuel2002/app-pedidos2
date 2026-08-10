@@ -37,6 +37,11 @@ export const routes: Routes = [
         .then(c => c.RegistrarUsuario)
     },
     {
+        path : 'registro-repartidor',
+        loadComponent : () => import("@componentes/registro-repartidor/registro-repartidor")
+        .then(c => c.RegistroRepartidor)
+    },
+    {
         path : 'repartidor',
         loadComponent : () => import("@componentes/repartidor/repartidor")
         .then(c => c.Repartidor),

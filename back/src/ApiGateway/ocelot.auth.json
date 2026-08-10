@@ -23,6 +23,18 @@
           "Port": 5000
         }
       ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/auth/logout",
+      "DownstreamPathTemplate": "/api/auth/logout",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "auth",
+          "Port": 5000
+        }
+      ]
     }
   ]
 }

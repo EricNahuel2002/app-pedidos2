@@ -98,4 +98,18 @@ public class AuthControlador : ControllerBase
             rol = User.FindFirst("role")?.Value
         });
     }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("access_token", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false,
+            SameSite = SameSiteMode.Lax,
+            Path = "/"
+        });
+
+        return Ok(new { mensaje = "Sesión cerrada" });
+    }
 }

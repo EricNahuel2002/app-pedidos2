@@ -47,8 +47,8 @@ export class UsuarioService {
       return this.http.post(`${environment.BACKEND_URL}/usuarios/registrarCliente`,{nombre,email,contrasenia,direccion,telefono},{withCredentials: true});
     }
 
-    registrarRepartidor(nombre:string,email:string,contrasenia:string,direccion:string,telefono:string){
-      return this.http.post(`${environment.BACKEND_URL}/usuarios/registrarCliente`,{nombre,email,contrasenia,direccion,telefono},{withCredentials: true});
+    registrarRepartidor(nombre:string,email:string,contrasenia:string,dni:string,direccion:string){
+      return this.http.post(`${environment.BACKEND_URL}/usuarios/registrarRepartidor`,{nombre,email,contrasenia,dni,direccion},{withCredentials: true});
     }
     
     logout(){

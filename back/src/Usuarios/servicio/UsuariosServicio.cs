@@ -10,6 +10,8 @@ public interface IUsuariosServicio
     Task<UsuarioClienteDto> ObtenerUsuarioCliente(int id);
     Task<UsuarioRepartidorDto> ObtenerUsuarioRepartidor(int id);
     Task<UsuarioDto> ValidarCredencialesDeUsuario(LoginDto dto);
+    Task RegistrarClienteAsync(RegistrarClienteDto dto);
+    Task RegistrarRepartidorAsync(RegistrarRepartidorDto dto);
 }
 public class UsuariosServicio : IUsuariosServicio
 {
@@ -84,5 +86,74 @@ public class UsuariosServicio : IUsuariosServicio
         UsuarioDto usuarioDto = new UsuarioDto(usuario.Id, usuario.Email, rol.Nombre);
 
         return usuarioDto;
+    }
+
+    public async Task RegistrarClienteAsync(RegistrarClienteDto dto)
+    {
+        await ValidarEmailDisponible(dto.Email);
+
+        Usuario usuario = new Usuario
+        {
+            Nombre = dto.Nombre,
+            Email = dto.Email,
+            Contrasenia = dto.Contrasenia
+        };
+
+        usuario.Cliente = new Cliente
+        {
+            Direccion = dto.Direccion,
+            NumeroTelefonico = dto.Telefono,
+            Saldo = 0
+        };
+
+        await AsignarRolYGuardar(usuario, "cliente");
+    }
+
+    public async Task RegistrarRepartidorAsync(RegistrarRepartidorDto dto)
+    {
+        await ValidarEmailDisponible(dto.Email);
+
+        Usuario usuario = new Usuario
+        {
+            Nombre = dto.Nombre,
+            Email = dto.Email,
+            Contrasenia = dto.Contrasenia
+        };
+
+        usuario.Repartidor = new Repartidor
+        {
+            Dni = dto.Dni,
+            FotoDniUrl = string.Empty,
+            Verificado = false
+        };
+
+        await AsignarRolYGuardar(usuario, "repartidor");
+    }
+
+    private async Task ValidarEmailDisponible(string email)
+    {
+        Usuario existente = await _usuarioRepo.ObtenerUsuarioPorEmail(email);
+
+        if (existente != null)
+        {
+            throw new EmailYaRegistradoException();
+        }
+    }
+
+    private async Task AsignarRolYGuardar(Usuario usuario, string nombreRol)
+    {
+        Rol rol = await _usuarioRepo.ObtenerRolPorNombre(nombreRol);
+
+        if (rol == null)
+        {
+            throw new InvalidOperationException($"El rol {nombreRol} no existe");
+        }
+
+        usuario.UsuarioRoles.Add(new UsuarioRol
+        {
+            Rol = rol
+        });
+
+        await _usuarioRepo.GuardarUsuarioAsync(usuario);
     }
 }

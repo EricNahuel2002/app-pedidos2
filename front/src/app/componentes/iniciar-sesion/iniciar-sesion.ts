@@ -45,5 +45,9 @@ export class IniciarSesion implements OnInit{
     this.router.navigate(['/registro-usuario']);
   }
 
+  registrarseRepartidor(){
+    this.router.navigate(['/registro-repartidor']);
+  }
+
 
 }
