@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 using Ordenes.contexto;
+using Ordenes.middleware;
 using Ordenes.repositorio;
 using Ordenes.servicio;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
@@ -56,7 +57,7 @@ var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
+    Console.WriteLine("ADVERTENCIA: Cadena de conexiï¿½n 'DefaultConnection' no encontrada.");
 }
 
 builder.Services.AddDbContext<OrdenesDbContext>(options =>
@@ -84,6 +85,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 app.MapControllers();
 ApplyMigrations(app);
 
@@ -108,15 +111,15 @@ static void ApplyMigrations(IApplicationBuilder app)
         try
         {
             Console.WriteLine("Ordenes: Aplicando migraciones...");
-            // Este método crea la base de datos si no existe y aplica todas las migraciones pendientes.
+            // Este mï¿½todo crea la base de datos si no existe y aplica todas las migraciones pendientes.
             dbContext.Database.Migrate();
-            Console.WriteLine("Ordenes: Migraciones aplicadas con éxito.");
+            Console.WriteLine("Ordenes: Migraciones aplicadas con ï¿½xito.");
         }
         catch (Exception ex)
         {
-            // Captura errores de conexión o migración. 
+            // Captura errores de conexiï¿½n o migraciï¿½n. 
             Console.WriteLine($"Ordenes: ERROR al aplicar migraciones: {ex.Message}");
-            // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
+            // La configuraciï¿½n de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
         }
     }
 }

@@ -30,9 +30,9 @@ public class MenuController : Controller
             Menu menu = await _menuServicio.ObtenerMenuAsync(id);
             return Ok(menu);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode(500, "Error al obtener el menu: " + ex.Message);
+            return StatusCode(500, "Error al obtener el menu");
         }
     }
     [HttpGet]
@@ -43,9 +43,9 @@ public class MenuController : Controller
             return Ok(await _menuServicio.ObtenerMenusAsync());
 
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode(500, "Error al obtener los menus: " + ex.Message);
+            return StatusCode(500, "Error al obtener los menus");
         }
     }
 }

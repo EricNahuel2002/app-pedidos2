@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Usuarios.contexto;
+using Usuarios.entidad;
+using Usuarios.middleware;
 using Usuarios.repositorio;
 using Usuarios.servicio;
 
@@ -15,7 +17,7 @@ var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
+    Console.WriteLine("ADVERTENCIA: Cadena de conexiï¿½n 'DefaultConnection' no encontrada.");
 }
 
 builder.Services.AddDbContext<UsuariosDbContext>(options =>
@@ -37,6 +39,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
 ApplyMigrations(app);
@@ -60,14 +64,31 @@ static void ApplyMigrations(IApplicationBuilder app)
         {
             Console.WriteLine("Usuarios: Aplicando migraciones...");
             dbContext.Database.Migrate();
-            Console.WriteLine("Usuarios: Migraciones aplicadas con éxito.");
+            SeedRoles(dbContext);
+            Console.WriteLine("Usuarios: Migraciones aplicadas con ï¿½xito.");
         }
         catch (Exception ex)
         {
-            // Captura errores de conexión o migración. 
-            // Esto sucede a menudo si el contenedor MySQL aún no está listo.
+            // Captura errores de conexiï¿½n o migraciï¿½n. 
+            // Esto sucede a menudo si el contenedor MySQL aï¿½n no estï¿½ listo.
             Console.WriteLine($"Usuarios: ERROR al aplicar migraciones: {ex.Message}");
-            // La configuración de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
+            // La configuraciï¿½n de RetryOnFailure en el AddDbContext ayuda a mitigar este error.
         }
     }
+}
+
+static void SeedRoles(UsuariosDbContext dbContext)
+{
+    var rolesExistentes = dbContext.Roles.Select(r => r.Nombre).ToList();
+    var roles = new[] { "cliente", "repartidor", "administrador" };
+
+    foreach (var nombre in roles)
+    {
+        if (!rolesExistentes.Contains(nombre))
+        {
+            dbContext.Roles.Add(new Rol { Nombre = nombre });
+        }
+    }
+
+    dbContext.SaveChanges();
 }

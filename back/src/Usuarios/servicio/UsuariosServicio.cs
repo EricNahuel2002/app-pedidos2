@@ -1,4 +1,5 @@
-﻿using Usuarios.dto;
+﻿using BCryptHash = BCrypt.Net.BCrypt;
+using Usuarios.dto;
 using Usuarios.entidad;
 using Usuarios.excepciones;
 using Usuarios.repositorio;
@@ -72,7 +73,7 @@ public class UsuariosServicio : IUsuariosServicio
     {
         Usuario usuario = await _usuarioRepo.ObtenerUsuarioPorEmail(dto.Email);
 
-        if(usuario == null || !dto.Contrasenia.Equals(usuario.Contrasenia))
+        if(usuario == null || !BCryptHash.Verify(dto.Contrasenia, usuario.Contrasenia))
         {
             throw new CredencialesInvalidasException();
         }
@@ -96,7 +97,7 @@ public class UsuariosServicio : IUsuariosServicio
         {
             Nombre = dto.Nombre,
             Email = dto.Email,
-            Contrasenia = dto.Contrasenia
+            Contrasenia = BCryptHash.HashPassword(dto.Contrasenia)
         };
 
         usuario.Cliente = new Cliente
@@ -117,7 +118,7 @@ public class UsuariosServicio : IUsuariosServicio
         {
             Nombre = dto.Nombre,
             Email = dto.Email,
-            Contrasenia = dto.Contrasenia
+            Contrasenia = BCryptHash.HashPassword(dto.Contrasenia)
         };
 
         usuario.Repartidor = new Repartidor

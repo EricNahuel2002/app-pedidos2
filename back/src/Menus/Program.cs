@@ -1,4 +1,5 @@
 using Menus.Context;
+using Menus.middleware;
 using Menus.repositorio;
 using Menus.servicio;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -51,7 +52,7 @@ var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
+    Console.WriteLine("ADVERTENCIA: Cadena de conexiï¿½n 'DefaultConnection' no encontrada.");
 }
 
 builder.Services.AddDbContext<MenuDbContext>(options =>
@@ -72,6 +73,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
 

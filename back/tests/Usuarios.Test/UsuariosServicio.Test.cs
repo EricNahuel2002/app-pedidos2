@@ -28,7 +28,7 @@ public class UsuariosServicioTest: IClassFixture<UsuariosServicioFixture>
         List<UsuarioRol> urList = new List<UsuarioRol> { new UsuarioRol { Id = 1, Rol = rol} };
         Usuario usuario = new Usuario
         {
-            Id = 1, Email = dto.Email, Contrasenia = dto.Contrasenia,
+            Id = 1, Email = dto.Email, Contrasenia = BCrypt.Net.BCrypt.HashPassword(dto.Contrasenia),
             Nombre = "pepe", Cliente = null, UsuarioRoles = urList, Repartidor = null
         };
 
@@ -49,7 +49,7 @@ public class UsuariosServicioTest: IClassFixture<UsuariosServicioFixture>
         {
             Id = 1,
             Email = dto.Email,
-            Contrasenia = "123",
+            Contrasenia = BCrypt.Net.BCrypt.HashPassword("123"),
             Nombre = "pepe",
             Cliente = null,
             UsuarioRoles = urList,
@@ -70,7 +70,7 @@ public class UsuariosServicioTest: IClassFixture<UsuariosServicioFixture>
         {
             Id = 1,
             Email = dto.Email,
-            Contrasenia = dto.Contrasenia,
+            Contrasenia = BCrypt.Net.BCrypt.HashPassword(dto.Contrasenia),
             Nombre = "pepe",
             Cliente = null,
             UsuarioRoles = null,
@@ -91,7 +91,7 @@ public class UsuariosServicioTest: IClassFixture<UsuariosServicioFixture>
         {
             Id = 1,
             Email = dto.Email,
-            Contrasenia = dto.Contrasenia,
+            Contrasenia = BCrypt.Net.BCrypt.HashPassword(dto.Contrasenia),
             Nombre = "pepe",
             Cliente = null,
             UsuarioRoles = urList,

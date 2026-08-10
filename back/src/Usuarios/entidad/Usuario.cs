@@ -11,7 +11,7 @@ public class Usuario
     [Required]
     public string Email { get; set; } = null!;
     [Required]
-    [MaxLength(50)]
+    [MaxLength(255)]
     public string Contrasenia { get; set; } = null!;
 
     public Cliente? Cliente { get; set; }

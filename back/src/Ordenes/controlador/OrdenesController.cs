@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordenes.dto;
+using Ordenes.excepciones;
 using Ordenes.servicio;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -35,9 +36,9 @@ public class OrdenesController : Controller
             var resultado = await _ordenServicio.CancelarOrdenDelCliente(int.Parse(idCliente), dto.IdOrden);
             return Ok(new { mensaje = resultado});
         }
-        catch(Exception e)
+        catch(Exception)
         {
-            return StatusCode(500, e.Message);
+            return StatusCode(500, "Error interno del servidor");
         }
     }
 
@@ -54,9 +55,9 @@ public class OrdenesController : Controller
             var resultado = await _ordenServicio.ConfirmarOrdenDelClienteAsync(int.Parse(idUsuario),idMenu);
             return StatusCode(201, new {menasaje = resultado});
         }
-        catch(Exception e)
+        catch(Exception)
         {
-            return StatusCode(500, e.Message);
+            return StatusCode(500, "Error interno del servidor");
         }
     }
     [HttpGet("cliente")]
@@ -76,9 +77,9 @@ public class OrdenesController : Controller
             var resultado = await _ordenServicio.ObtenerOrdenesDelClienteAsync(idUsuario);
             return Ok(resultado);
         }
-        catch(Exception e)
+        catch(Exception)
         {
-            return StatusCode(500,e.Message);
+            return StatusCode(500, "Error interno del servidor");
         }
     }
 
@@ -91,9 +92,9 @@ public class OrdenesController : Controller
             var ordenesPendientes = await _ordenServicio.ObtenerOrdenesPendientes();
             return Ok(ordenesPendientes);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            return StatusCode(500, e.Message);
+            return StatusCode(500, "Error interno del servidor");
         }
     }
 
@@ -114,9 +115,9 @@ public class OrdenesController : Controller
             var resultado = await _ordenServicio.TomarUnaOrden(int.Parse(idUsuario), idOrden);
             return Ok(resultado);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            return StatusCode(500, e.Message);
+            return StatusCode(500, "Error interno del servidor");
         }
     }
 
@@ -137,9 +138,9 @@ public class OrdenesController : Controller
             var resultado = await _ordenServicio.MarcarOrdenComoFinalizada(int.Parse(idUsuario), idOrden);
             return Ok(resultado);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            return StatusCode(500, e.Message);
+            return StatusCode(500, "Error interno del servidor");
         }
     }
 
@@ -161,9 +162,9 @@ public class OrdenesController : Controller
             var resultado = await _ordenServicio.ObtenerOrdenesTomadasDelRepartidorAsync(idUsuario);
             return Ok(resultado);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            return StatusCode(500, e.Message);
+            return StatusCode(500, "Error interno del servidor");
         }
     }
 }

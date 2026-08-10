@@ -80,9 +80,17 @@ namespace Usuarios.controlador
             {
                 var resultado = await _usuarioServicio.ObtenerUsuarioCliente(id);
                 return Ok(resultado);
-            }catch(Exception e)
+            }catch(KeyNotFoundException)
             {
-                return StatusCode(500, e.Message);
+                return NotFound(new { mensaje = "El usuario no existe" });
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest(new { mensaje = "El usuario no tiene un perfil asociado" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno del servidor");
             }
         }
 
@@ -94,9 +102,17 @@ namespace Usuarios.controlador
                 var resultado = await _usuarioServicio.ObtenerUsuarioRepartidor(id);
                 return Ok(resultado);
             }
-            catch (Exception e)
+            catch (KeyNotFoundException)
             {
-                return StatusCode(500, e.Message);
+                return NotFound(new { mensaje = "El usuario no existe" });
+            }
+            catch (InvalidOperationException)
+            {
+                return BadRequest(new { mensaje = "El usuario no tiene un perfil asociado" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno del servidor");
             }
         }
     }
