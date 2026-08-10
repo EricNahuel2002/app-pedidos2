@@ -27,7 +27,7 @@ services:
       dockerfile: src/ApiGateway/Dockerfile
       target: dev
     ports:
-        - "5000:5000"
+        - "5100:5000"
     container_name: ApiGateway
     environment:
       ASPNETCORE_URLS: "http://+:5000"
