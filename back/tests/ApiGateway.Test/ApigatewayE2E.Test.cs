@@ -158,7 +158,7 @@ public class GatewayE2ETests
         var json = await respuesta.Content.ReadAsStringAsync();
         Assert.False(string.IsNullOrWhiteSpace(json));
 
-        Assert.Contains("mensaje", json);
+        Assert.Contains("idOrden", json);
     }
 
 
@@ -183,7 +183,7 @@ public class GatewayE2ETests
         var json = await respuesta.Content.ReadAsStringAsync();
         Assert.False(string.IsNullOrWhiteSpace(json));
 
-        Assert.Contains("data", json);
+        Assert.Contains("email", json);
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public class GatewayE2ETests
         var json = await respuesta.Content.ReadAsStringAsync();
         Assert.False(string.IsNullOrWhiteSpace(json));
 
-        Assert.Contains("data", json);
+        Assert.Contains("email", json);
     }
 
 
@@ -217,9 +217,9 @@ public class GatewayE2ETests
         var json = await respuesta.Content.ReadAsStringAsync();
         Assert.Contains("rol", json);
 
-        bool tieneCookie = respuesta.Headers.TryGetValues("Set-Cookie", out var cookies);
+        bool tieneCookie = respuesta.Headers.Any(h => h.Key == "Set-Cookie");
         Assert.True(tieneCookie);
-        Assert.Contains(cookies, c => c.Contains("access_token"));
+        Assert.Contains(respuesta.Headers.SelectMany(h => h.Value), c => c.Contains("access_token"));
     }
 
     [Fact]

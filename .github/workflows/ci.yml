@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend:
+    name: Backend (build + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: back
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restaurar herramientas locales
+        run: dotnet tool restore
+
+      - name: Compilar solucion
+        run: dotnet build ApPedidos.Test.sln -c Release
+
+      - name: Ejecutar tests unitarios e in-process (WireMock)
+        run: dotnet test ApPedidos.Test.sln -c Release --no-build --filter "FullyQualifiedName!~GatewayE2ETests"
+
+  frontend:
+    name: Frontend (build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: front
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: front/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar la aplicacion
+        run: npm run build
+
+  e2e:
+    name: E2E (docker compose)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: back
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Levantar la stack de pruebas
+        run: docker compose -f docker-compose-test.yml up -d --build
+
+      - name: Esperar a que los servicios esten listos
+        run: |
+          set -e
+          for i in $(seq 1 90); do
+            roles=$(docker compose -f docker-compose-test.yml exec -T mysql mysql -uadmin -proot -N -s -e "SELECT COUNT(*) FROM db_usuarios_test.Roles;" 2>/dev/null || true)
+            menus=$(docker compose -f docker-compose-test.yml exec -T mysql mysql -uadmin -proot -N -s -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='db_menus_test' AND table_name='Menus';" 2>/dev/null || true)
+            ordenes=$(docker compose -f docker-compose-test.yml exec -T mysql mysql -uadmin -proot -N -s -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='db_ordenes_test' AND table_name='Ordenes';" 2>/dev/null || true)
+            if [ "$roles" = "3" ] && [ "$menus" = "1" ] && [ "$ordenes" = "1" ]; then
+              echo "Servicios listos."
+              exit 0
+            fi
+            echo "Esperando migraciones... (roles=$roles menus=$menus ordenes=$ordenes)"
+            sleep 5
+          done
+          echo "Los servicios no estuvieron listos a tiempo" >&2
+          exit 1
+
+      - name: Sembrar datos de prueba
+        run: docker compose -f docker-compose-test.yml exec -T mysql mysql -uadmin -proot < seed-test.sql
+
+      - name: Ejecutar tests E2E
+        run: dotnet test tests/ApiGateway.Test -c Release --filter "FullyQualifiedName~GatewayE2ETests"
+
+      - name: Bajar la stack
+        if: always()
+        run: docker compose -f docker-compose-test.yml down -v
