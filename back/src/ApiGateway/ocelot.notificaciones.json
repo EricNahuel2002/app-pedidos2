@@ -1,0 +1,42 @@
+{
+  "Routes": [
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/notificaciones/usuario",
+      "DownstreamPathTemplate": "/api/notificaciones/usuario",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notificaciones",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "cliente"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "Patch" ],
+      "UpstreamPathTemplate": "/notificaciones/{id}/leida",
+      "DownstreamPathTemplate": "/api/notificaciones/{id}/leida",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notificaciones",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "cliente"
+      }
+    }
+  ]
+}

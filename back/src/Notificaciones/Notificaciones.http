@@ -1,6 +1,21 @@
 @Notificaciones_HostAddress = http://localhost:5104
 
-GET {{Notificaciones_HostAddress}}/weatherforecast/
+GET {{Notificaciones_HostAddress}}/api/notificaciones/usuario
 Accept: application/json
+
+###
+
+PATCH {{Notificaciones_HostAddress}}/api/notificaciones/1/leida
+Accept: application/json
+
+###
+
+POST {{Notificaciones_HostAddress}}/api/notificaciones
+Content-Type: application/json
+
+{
+  "idUsuario": 1,
+  "mensaje": "Tu pedido fue confirmado"
+}
 
 ###

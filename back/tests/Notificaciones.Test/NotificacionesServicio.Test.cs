@@ -1,100 +1,76 @@
 using Moq;
-using Notificaciones.dto;
+using Notificaciones.entidad;
+using Notificaciones.excepciones;
+using Notificaciones.repositorio;
 using Notificaciones.servicio;
-using System.Net;
-using System.Net.Http.Json;
 
 namespace Notificaciones.Test;
 
 public class NotificacionesServicioTest
 {
-    private static NotificacionesServicio CrearServicio(HttpResponseMessage respuesta)
+    private readonly Mock<INotificacionesRepositorio> _repoMock;
+    private readonly NotificacionesServicio _servicio;
+
+    public NotificacionesServicioTest()
     {
-        var handler = new FakeHttpMessageHandler(respuesta);
-        var cliente = new HttpClient(handler)
+        _repoMock = new Mock<INotificacionesRepositorio>();
+        _servicio = new NotificacionesServicio(_repoMock.Object);
+    }
+
+    [Fact]
+    public async Task AlObtenerNotificacionesDelUsuarioDevuelveLasNotificacionesDelRepositorio()
+    {
+        var notificaciones = new List<Notificacion>
         {
-            BaseAddress = new Uri("http://localhost")
+            new Notificacion { IdNotificacion = 1, IdUsuario = 1, Mensaje = "Tu pedido fue tomado", Leida = false, FechaCreacion = DateTime.UtcNow }
         };
 
-        var fabrica = new Mock<IHttpClientFactory>();
-        fabrica.Setup(f => f.CreateClient("Apigateway")).Returns(cliente);
+        _repoMock.Setup(r => r.ObtenerNotificacionesDelUsuarioAsync(1)).ReturnsAsync(notificaciones);
 
-        return new NotificacionesServicio(fabrica.Object);
+        var resultado = await _servicio.ObtenerNotificacionesDelUsuarioAsync(1);
+
+        Assert.Single(resultado);
+        Assert.Equal(1, resultado[0].IdNotificacion);
+        Assert.Equal("Tu pedido fue tomado", resultado[0].Mensaje);
     }
 
     [Fact]
-    public async Task AlMarcarUnaOrdenComoFinalizadaRetornaElMensajeDeExito()
+    public async Task AlCrearUnaNotificacionGuardaUnaNotificacionNueva()
     {
-        var servicio = CrearServicio(new HttpResponseMessage(HttpStatusCode.OK));
+        await _servicio.CrearNotificacionAsync(5, "Tu pedido fue confirmado");
 
-        var mensaje = await servicio.MarcarOrdenComoFinalizada(1, 5);
-
-        Assert.Equal("Orden con id:5 finalizada", mensaje);
+        _repoMock.Verify(r => r.GuardarNotificacionAsync(It.Is<Notificacion>(n =>
+            n.IdUsuario == 5 &&
+            n.Mensaje == "Tu pedido fue confirmado" &&
+            n.Leida == false)), Times.Once);
     }
 
     [Fact]
-    public async Task SiElServicioDeOrdenesFallaAlMarcarUnaOrdenComoFinalizadaSeLanzaHttpRequestException()
+    public async Task SiElMensajeEstaVacioAlCrearUnaNotificacionSeLanzaInvalidOperationException()
     {
-        var servicio = CrearServicio(new HttpResponseMessage(HttpStatusCode.InternalServerError));
-
-        await Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await servicio.MarcarOrdenComoFinalizada(1, 5));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await _servicio.CrearNotificacionAsync(5, "   "));
     }
 
     [Fact]
-    public async Task AlObtenerOrdenesPendientesDevuelveLasOrdenesDelServicioDeOrdenes()
+    public async Task AlMarcarUnaNotificacionComoLeidaActualizaLaNotificacion()
     {
-        var orden = new OrdenDto
-        {
-            IdOrden = 1,
-            IdUsuario = 1,
-            IdMenu = 1,
-            NombreMenu = "Empanadas",
-            NombreCliente = "Pepe",
-            EmailCliente = "pepe@gmail.com",
-            PrecioAPagar = 10,
-            Estado = "Pendiente",
-            Direccion = "Calle 1"
-        };
-        var respuesta = new HttpResponseMessage(HttpStatusCode.OK)
-        {
-            Content = JsonContent.Create(new List<OrdenDto> { orden })
-        };
-        var servicio = CrearServicio(respuesta);
+        var notificacion = new Notificacion { IdNotificacion = 3, IdUsuario = 1, Mensaje = "Tu pedido fue finalizado", Leida = false };
 
-        var ordenes = await servicio.ObtenerOrdenesPendientes();
+        _repoMock.Setup(r => r.ObtenerNotificacionAsync(1, 3)).ReturnsAsync(notificacion);
 
-        Assert.Single(ordenes);
-        Assert.Equal(1, ordenes[0].IdOrden);
-        Assert.Equal("Empanadas", ordenes[0].NombreMenu);
+        await _servicio.MarcarNotificacionComoLeidaAsync(1, 3);
+
+        Assert.True(notificacion.Leida);
+        _repoMock.Verify(r => r.ActualizarNotificacionAsync(notificacion), Times.Once);
     }
 
     [Fact]
-    public async Task SiElServicioDeOrdenesFallaAlObtenerOrdenesPendientesSeLanzaHttpRequestException()
+    public async Task SiLaNotificacionNoExisteAlMarcarComoLeidaSeLanzaNotificacionNoEncontradaException()
     {
-        var servicio = CrearServicio(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+        _repoMock.Setup(r => r.ObtenerNotificacionAsync(1, 99)).ReturnsAsync((Notificacion?)null);
 
-        await Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await servicio.ObtenerOrdenesPendientes());
-    }
-
-    [Fact]
-    public async Task AlTomarUnaOrdenConExitoRetornaElMensajeDeExito()
-    {
-        var servicio = CrearServicio(new HttpResponseMessage(HttpStatusCode.OK));
-
-        var mensaje = await servicio.TomarUnaOrden(1, 5);
-
-        Assert.Equal("Orden tomada exitosamente", mensaje);
-    }
-
-    [Fact]
-    public async Task AlTomarUnaOrdenQueYaFueTomadaRetornaElMensajeDeError()
-    {
-        var servicio = CrearServicio(new HttpResponseMessage(HttpStatusCode.Conflict));
-
-        var mensaje = await servicio.TomarUnaOrden(1, 5);
-
-        Assert.Equal("Orden ya tomada por otro repartidor o ya finalizada", mensaje);
+        await Assert.ThrowsAsync<NotificacionNoEncontradaException>(async () =>
+            await _servicio.MarcarNotificacionComoLeidaAsync(1, 99));
     }
 }

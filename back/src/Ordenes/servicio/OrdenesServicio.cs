@@ -19,11 +19,13 @@ public class OrdenesServicio : IOrdenesServicio
 {
     private IOrdenesRepositorio _repo;
     private HttpClient _http;
+    private HttpClient _notificacionesHttp;
 
     public OrdenesServicio(IOrdenesRepositorio repo,IHttpClientFactory factory)
     {
         _repo = repo;
         _http = factory.CreateClient("Apigateway");
+        _notificacionesHttp = factory.CreateClient("Notificaciones");
     }
 
 
@@ -82,6 +84,7 @@ public class OrdenesServicio : IOrdenesServicio
 
 
         await _repo.GuardarOrdenDelClienteAsync(orden);
+        await NotificarAlClienteAsync(orden.IdCliente, $"Tu pedido de {menu.Nombre} fue confirmado");
         return "Orden confirmada";
 
     }
@@ -110,6 +113,8 @@ public class OrdenesServicio : IOrdenesServicio
         orden.Estado = "FINALIZADA";
 
         await _repo.ActualizarEstadoDeOrden(orden);
+
+        await NotificarAlClienteAsync(orden.IdCliente, $"Tu pedido de {orden.NombreMenu} fue finalizado");
 
         return $"Orden finalizada";
     }
@@ -147,11 +152,19 @@ public class OrdenesServicio : IOrdenesServicio
 
         await _repo.ActualizarEstadoDeOrden(orden);
 
+        await NotificarAlClienteAsync(orden.IdCliente, $"Tu pedido de {orden.NombreMenu} fue tomado por {orden.NombreRepartidor}");
+
         return "Orden tomada exitosamente";
     }
 
     public async Task<List<Orden>> ObtenerOrdenesTomadasDelRepartidorAsync(int idUsuario)
     {
         return await _repo.ObtenerOrdenesTomadasDelRepartidorAsync(idUsuario);
+    }
+
+    private async Task NotificarAlClienteAsync(int idCliente, string mensaje)
+    {
+        var resultado = await _notificacionesHttp.PostAsJsonAsync("/api/notificaciones", new { idUsuario = idCliente, mensaje });
+        resultado.EnsureSuccessStatusCode();
     }
 }

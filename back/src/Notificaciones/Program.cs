@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Notificaciones.contexto;
+using Notificaciones.middleware;
+using Notificaciones.repositorio;
 using Notificaciones.servicio;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
 
 var configuration = builder.Configuration;
 var jwtKey = configuration["Jwt:Key"];
@@ -49,16 +48,39 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddScoped<INotificacionesServicio, NotificacionesServicio>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddHttpClient("Apigateway", client =>
+var serverVersion = new MySqlServerVersion(new Version(9, 5, 0));
+
+if (string.IsNullOrEmpty(connectionString))
 {
-    client.BaseAddress = new Uri("http://apigateway:5000/");
-});
+    Console.WriteLine("ADVERTENCIA: Cadena de conexión 'DefaultConnection' no encontrada.");
+}
+
+builder.Services.AddDbContext<NotificacionesDbContext>(options =>
+    options.UseMySql(
+        connectionString, serverVersion,
+        mysqlOptions => mysqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null)
+    )
+);
+
+builder.Services.AddScoped<INotificacionesRepositorio, NotificacionesRepositorio>();
+builder.Services.AddScoped<INotificacionesServicio, NotificacionesServicio>();
 
 builder.Services.AddControllers();
 
+// Add services to the container.
+builder.Services.AddOpenApi();
+
+var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 app.MapControllers();
+ApplyMigrations(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -66,9 +88,26 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.Run();
 
+static void ApplyMigrations(IApplicationBuilder app)
+{
+    using (var scope = app.ApplicationServices.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<NotificacionesDbContext>();
+
+        try
+        {
+            Console.WriteLine("Notificaciones: Aplicando migraciones...");
+            dbContext.Database.Migrate();
+            Console.WriteLine("Notificaciones: Migraciones aplicadas con éxito.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Notificaciones: ERROR al aplicar migraciones: {ex.Message}");
+        }
+    }
+}

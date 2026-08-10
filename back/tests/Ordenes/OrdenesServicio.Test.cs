@@ -17,11 +17,14 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
 {
     private Mock<IOrdenesRepositorio> _repoMock;
     private IOrdenesServicio _ordenesServicio;
+    private List<string> _notificacionesEnviadas;
 
     public OrdenesServicioTest(OrdenesServicioFixture fixture)
     {
         this._repoMock = fixture.repoMock;
         this._ordenesServicio = fixture.ordenServicio;
+        this._notificacionesEnviadas = fixture.notificacionesEnviadas;
+        this._notificacionesEnviadas.Clear();
     }
 
 
@@ -111,6 +114,69 @@ public class OrdenesServicioTest : IClassFixture<OrdenesServicioFixture>
         _repoMock.Setup(r => r.ObtenerOrdenDelClienteAsync(idCliente, idOrden)).ReturnsAsync(orden);
 
         await Assert.ThrowsAsync<OrdenYaCanceladaException>(async () => await _ordenesServicio.CancelarOrdenDelCliente(idCliente, idOrden));
+    }
+
+    [Fact]
+    public async Task QueAlConfirmarUnaOrdenSeNotifiqueAlCliente()
+    {
+        int idUsuario = 1; int idMenu = 1;
+
+        _repoMock.Setup(r => r.GuardarOrdenDelClienteAsync(It.IsAny<Orden>()));
+
+        await _ordenesServicio.ConfirmarOrdenDelClienteAsync(idUsuario, idMenu);
+
+        var notificacion = Assert.Single(_notificacionesEnviadas);
+        Assert.Contains("confirmado", notificacion);
+        Assert.Contains("\"idUsuario\":1", notificacion);
+    }
+
+    [Fact]
+    public async Task QueAlTomarUnaOrdenSeNotifiqueAlCliente()
+    {
+        int idUsuario = 1; int idOrden = 1;
+
+        Orden orden = new Orden
+        {
+            IdOrden = idOrden,
+            IdCliente = 3,
+            NombreMenu = "Menu 1",
+            Estado = "PENDIENTE"
+        };
+
+        _repoMock.Setup(r => r.ObtenerOrden(idOrden)).ReturnsAsync(orden);
+        _repoMock.Setup(r => r.ActualizarEstadoDeOrden(It.IsAny<Orden>()));
+
+        var resultado = await _ordenesServicio.TomarUnaOrden(idUsuario, idOrden);
+
+        Assert.Equal("Orden tomada exitosamente", resultado);
+        var notificacion = Assert.Single(_notificacionesEnviadas);
+        Assert.Contains("tomado", notificacion);
+        Assert.Contains("\"idUsuario\":3", notificacion);
+    }
+
+    [Fact]
+    public async Task QueAlMarcarUnaOrdenComoFinalizadaSeNotifiqueAlCliente()
+    {
+        int idUsuario = 1; int idOrden = 1;
+
+        Orden orden = new Orden
+        {
+            IdOrden = idOrden,
+            IdCliente = 3,
+            NombreMenu = "Menu 1",
+            Estado = "EN CURSO",
+            IdRepartidor = idUsuario
+        };
+
+        _repoMock.Setup(r => r.ObtenerOrdenTomadaPorRepartidorAsync(idUsuario, idOrden)).ReturnsAsync(orden);
+        _repoMock.Setup(r => r.ActualizarEstadoDeOrden(It.IsAny<Orden>()));
+
+        var resultado = await _ordenesServicio.MarcarOrdenComoFinalizada(idUsuario, idOrden);
+
+        Assert.Equal("Orden finalizada", resultado);
+        var notificacion = Assert.Single(_notificacionesEnviadas);
+        Assert.Contains("finalizado", notificacion);
+        Assert.Contains("\"idUsuario\":3", notificacion);
     }
 
 }

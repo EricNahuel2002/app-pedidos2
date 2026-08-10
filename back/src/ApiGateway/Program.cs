@@ -14,7 +14,7 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnCh
 var merged = new JObject();
 var allRoutes = new JArray();
 
-var files = new[] { "ocelot.json", "ocelot.usuarios.json", "ocelot.menus.json", "ocelot.ordenes.json", "ocelot.auth.json" };
+var files = new[] { "ocelot.json", "ocelot.usuarios.json", "ocelot.menus.json", "ocelot.ordenes.json", "ocelot.auth.json", "ocelot.notificaciones.json" };
 foreach (var f in files)
 {
     if (!File.Exists(f)) continue;

@@ -78,6 +78,11 @@ builder.Services.AddHttpClient("Apigateway", client =>
     client.BaseAddress = new Uri("http://apigateway:5000/");
 });
 
+builder.Services.AddHttpClient("Notificaciones", client =>
+{
+    client.BaseAddress = new Uri("http://notificaciones:5000/");
+});
+
 builder.Services.AddControllers();
 
 // Add services to the container.
