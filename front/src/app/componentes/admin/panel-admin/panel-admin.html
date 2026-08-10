@@ -1,0 +1,95 @@
+<div class="container mt-4">
+  <h3 class="mb-4 text-primary fw-bold">Panel de Administración</h3>
+
+  <div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+            <i class="pi pi-users fs-2 text-primary"></i>
+          </div>
+          <div>
+            <div class="text-muted small">Usuarios</div>
+            <div class="fs-3 fw-bold">{{ totalUsuarios() }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+      <a routerLink="/admin/repartidores" class="card shadow-sm border-0 h-100 text-decoration-none">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+            <i class="pi pi-user-plus fs-2 text-warning"></i>
+          </div>
+          <div>
+            <div class="text-muted small">Repartidores pendientes</div>
+            <div class="fs-3 fw-bold text-dark">{{ repartidoresPendientes() }}</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+      <a routerLink="/admin/menus" class="card shadow-sm border-0 h-100 text-decoration-none">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="bg-success bg-opacity-10 rounded-3 p-3">
+            <i class="pi pi-book fs-2 text-success"></i>
+          </div>
+          <div>
+            <div class="text-muted small">Menús</div>
+            <div class="fs-3 fw-bold text-dark">{{ totalMenus() }}</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="bg-info bg-opacity-10 rounded-3 p-3">
+            <i class="pi pi-shopping-cart fs-2 text-info"></i>
+          </div>
+          <div>
+            <div class="text-muted small">Órdenes</div>
+            <div class="fs-3 fw-bold">{{ estadisticas().total }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Órdenes por estado</h5>
+    </div>
+    <div class="card-body">
+      <div class="row text-center g-3">
+        <div class="col-6 col-md-3">
+          <div class="rounded-3 p-3 bg-warning-subtle">
+            <div class="fs-3 fw-bold">{{ estadisticas().pendientes }}</div>
+            <div class="text-muted">Pendientes</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="rounded-3 p-3 bg-primary-subtle">
+            <div class="fs-3 fw-bold">{{ estadisticas().enCurso }}</div>
+            <div class="text-muted">En curso</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="rounded-3 p-3 bg-success-subtle">
+            <div class="fs-3 fw-bold">{{ estadisticas().finalizadas }}</div>
+            <div class="text-muted">Finalizadas</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="rounded-3 p-3 bg-danger-subtle">
+            <div class="fs-3 fw-bold">{{ estadisticas().canceladas }}</div>
+            <div class="text-muted">Canceladas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

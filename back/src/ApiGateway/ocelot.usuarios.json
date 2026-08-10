@@ -59,6 +59,63 @@
           "Port": 5000
         }
       ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/admin/usuarios",
+      "DownstreamPathTemplate": "/api/usuarios/administracion",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "administrador"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/admin/repartidores/pendientes",
+      "DownstreamPathTemplate": "/api/usuarios/administracion/repartidores/pendientes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "administrador"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "Patch" ],
+      "UpstreamPathTemplate": "/admin/repartidores/{id}/verificar",
+      "DownstreamPathTemplate": "/api/usuarios/administracion/repartidores/{id}/verificar",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "usuarios",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "administrador"
+      }
     }
   ]
 }

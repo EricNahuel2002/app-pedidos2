@@ -22,7 +22,9 @@ export class NavBar {
   }
 
   get logoLink(): string {
-    return this.role === 'repartidor' ? '/repartidor' : '/';
+    if (this.role === 'repartidor') return '/repartidor';
+    if (this.role === 'administrador') return '/admin';
+    return '/';
   }
 
   logout(): void {

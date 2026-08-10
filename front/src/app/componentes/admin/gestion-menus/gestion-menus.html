@@ -1,0 +1,89 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+      <h3 class="mb-0">Gestión de menús</h3>
+      <button class="btn btn-light btn-sm fw-medium" (click)="abrirNuevo()">
+        <i class="bi bi-plus-circle me-1"></i> Nuevo menú
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Imagen</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (menu of menusListados(); track menu.id) {
+              <tr>
+                <td><strong>#{{ menu.id }}</strong></td>
+                <td>{{ menu.nombre }}</td>
+                <td><small>{{ menu.descripcion }}</small></td>
+                <td>{{ menu.precio | currency }}</td>
+                <td>
+                  @if (menu.imagen) {
+                    <img [src]="menu.imagen" alt="{{ menu.nombre }}" width="60" height="45" class="rounded-2 object-fit-cover" />
+                  }
+                </td>
+                <td class="text-center">
+                  <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-warning btn-sm d-flex align-items-center gap-1" (click)="abrirEdicion(menu)">
+                      <i class="bi bi-pencil"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="eliminar(menu.id)">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+            @if (menusListados().length === 0) {
+              <tr>
+                <td colspan="6" class="text-center text-muted py-4">
+                  No hay menús cargados.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  header="{{ editandoId === null ? 'Nuevo menú' : 'Editar menú' }}"
+  styleClass="w-25 min-w-22rem"
+>
+  <form [formGroup]="menuForm" (ngSubmit)="guardar()">
+    <div class="mb-3">
+      <label for="nombre" class="form-label fw-medium">Nombre</label>
+      <input type="text" class="form-control" id="nombre" formControlName="nombre" required />
+    </div>
+    <div class="mb-3">
+      <label for="descripcion" class="form-label fw-medium">Descripción</label>
+      <textarea class="form-control" id="descripcion" rows="2" formControlName="descripcion"></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="precio" class="form-label fw-medium">Precio</label>
+      <input type="number" class="form-control" id="precio" formControlName="precio" min="1" required />
+    </div>
+    <div class="mb-3">
+      <label for="imagen" class="form-label fw-medium">URL de imagen</label>
+      <input type="text" class="form-control" id="imagen" formControlName="imagen" />
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-secondary" (click)="dialogVisible.set(false)">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="menuForm.invalid">Guardar</button>
+    </div>
+  </form>
+</p-dialog>

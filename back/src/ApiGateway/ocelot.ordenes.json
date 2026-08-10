@@ -151,6 +151,25 @@
       "RouteClaimsRequirement": {
         "role": "repartidor"
       }
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/admin/ordenes/estadisticas",
+      "DownstreamPathTemplate": "/api/ordenes/administracion/estadisticas",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "administrador"
+      }
     }
   ]
 }

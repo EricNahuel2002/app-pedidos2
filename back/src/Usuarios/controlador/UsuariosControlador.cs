@@ -115,5 +115,51 @@ namespace Usuarios.controlador
                 return StatusCode(500, "Error interno del servidor");
             }
         }
+
+        [HttpGet("administracion")]
+        public async Task<IActionResult> ListarUsuariosParaAdministracion()
+        {
+            try
+            {
+                var resultado = await _usuarioServicio.ObtenerUsuariosParaAdministracion();
+                return Ok(resultado);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        [HttpGet("administracion/repartidores/pendientes")]
+        public async Task<IActionResult> ListarRepartidoresPendientes()
+        {
+            try
+            {
+                var resultado = await _usuarioServicio.ObtenerRepartidoresPendientes();
+                return Ok(resultado);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        [HttpPatch("administracion/repartidores/{id}/verificar")]
+        public async Task<IActionResult> VerificarRepartidor(int id)
+        {
+            try
+            {
+                await _usuarioServicio.VerificarRepartidor(id);
+                return Ok(new { mensaje = "Repartidor verificado correctamente" });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { mensaje = "El repartidor no existe" });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
     }
 }

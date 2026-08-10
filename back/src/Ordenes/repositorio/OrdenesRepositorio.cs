@@ -15,6 +15,7 @@ public interface IOrdenesRepositorio
     Task<List<Orden>> ObtenerOrdenesPendientes();
     Task<List<Orden>> ObtenerOrdenesTomadasDelRepartidorAsync(int idUsuario);
     Task<Orden> ObtenerOrdenTomadaPorRepartidorAsync(int idUsuario, int idOrden);
+    Task<EstadisticasOrdenesDto> ObtenerEstadisticasAsync();
 }
 public class OrdenesRepositorio : IOrdenesRepositorio
 {
@@ -66,5 +67,17 @@ public class OrdenesRepositorio : IOrdenesRepositorio
     public async Task<Orden> ObtenerOrdenTomadaPorRepartidorAsync(int idUsuario, int idOrden)
     {
         return await _ctx.Ordenes.Where( o => o.IdOrden == idOrden && o.IdRepartidor == idUsuario).FirstOrDefaultAsync();
+    }
+
+    public async Task<EstadisticasOrdenesDto> ObtenerEstadisticasAsync()
+    {
+        return new EstadisticasOrdenesDto
+        {
+            Total = await _ctx.Ordenes.CountAsync(),
+            Pendientes = await _ctx.Ordenes.CountAsync(o => o.Estado == "PENDIENTE"),
+            EnCurso = await _ctx.Ordenes.CountAsync(o => o.Estado == "EN CURSO"),
+            Finalizadas = await _ctx.Ordenes.CountAsync(o => o.Estado == "FINALIZADA"),
+            Canceladas = await _ctx.Ordenes.CountAsync(o => o.Estado == "CANCELADA")
+        };
     }
 }

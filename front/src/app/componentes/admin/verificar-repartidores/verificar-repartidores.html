@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+      <h3 class="mb-0">Repartidores pendientes de verificación</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>DNI</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (repartidor of repartidoresListados(); track repartidor.id) {
+              <tr>
+                <td><strong>#{{ repartidor.id }}</strong></td>
+                <td>{{ repartidor.nombre }}</td>
+                <td><small>{{ repartidor.email }}</small></td>
+                <td>{{ repartidor.dni }}</td>
+                <td class="text-center">
+                  <button class="btn btn-success btn-sm d-flex align-items-center gap-1 mx-auto" (click)="verificar(repartidor.id)">
+                    <i class="bi bi-check-circle"></i> Verificar
+                  </button>
+                </td>
+              </tr>
+            }
+            @if (repartidoresListados().length === 0) {
+              <tr>
+                <td colspan="5" class="text-center text-muted py-4">
+                  No hay repartidores pendientes de verificación.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

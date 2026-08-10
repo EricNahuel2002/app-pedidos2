@@ -54,5 +54,26 @@ export const routes: Routes = [
         .then(c => c.RepartidorOrdenesTomadas),
         canActivate : [authGuard],
         data: {roles:['repartidor']}
+    },
+    {
+        path : 'admin',
+        loadComponent : () => import("@componentes/admin/panel-admin/panel-admin")
+        .then(c => c.PanelAdmin),
+        canActivate : [authGuard],
+        data : { roles:['administrador']}
+    },
+    {
+        path : 'admin/repartidores',
+        loadComponent : () => import("@componentes/admin/verificar-repartidores/verificar-repartidores")
+        .then(c => c.VerificarRepartidores),
+        canActivate : [authGuard],
+        data : { roles:['administrador']}
+    },
+    {
+        path : 'admin/menus',
+        loadComponent : () => import("@componentes/admin/gestion-menus/gestion-menus")
+        .then(c => c.GestionMenus),
+        canActivate : [authGuard],
+        data : { roles:['administrador']}
     }
 ];

@@ -14,6 +14,7 @@ public interface IOrdenesServicio
     Task<List<Orden>> ObtenerOrdenesPendientes();
     Task<string> TomarUnaOrden(int idUsuario, int idOrden);
     Task<List<Orden>> ObtenerOrdenesTomadasDelRepartidorAsync(int idUsuario);
+    Task<EstadisticasOrdenesDto> ObtenerEstadisticasDeOrdenes();
 }
 public class OrdenesServicio : IOrdenesServicio
 {
@@ -160,6 +161,11 @@ public class OrdenesServicio : IOrdenesServicio
     public async Task<List<Orden>> ObtenerOrdenesTomadasDelRepartidorAsync(int idUsuario)
     {
         return await _repo.ObtenerOrdenesTomadasDelRepartidorAsync(idUsuario);
+    }
+
+    public async Task<EstadisticasOrdenesDto> ObtenerEstadisticasDeOrdenes()
+    {
+        return await _repo.ObtenerEstadisticasAsync();
     }
 
     private async Task NotificarAlClienteAsync(int idCliente, string mensaje)

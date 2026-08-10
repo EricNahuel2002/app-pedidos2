@@ -17,4 +17,16 @@ export class MenuService {
     listarMenu(id:number): Observable<Menu>{
       return this.httpclient.get<Menu>(`${environment.BACKEND_URL}/menus/${id}`)
     }
+
+    crearMenu(menu: Menu): Observable<Menu> {
+      return this.httpclient.post<Menu>(`${environment.BACKEND_URL}/menus/crear`, menu, { withCredentials: true });
+    }
+
+    actualizarMenu(id: number, menu: Menu): Observable<Menu> {
+      return this.httpclient.put<Menu>(`${environment.BACKEND_URL}/admin/menus/${id}`, menu, { withCredentials: true });
+    }
+
+    eliminarMenu(id: number): Observable<{ mensaje: string }> {
+      return this.httpclient.delete<{ mensaje: string }>(`${environment.BACKEND_URL}/admin/menus/${id}`, { withCredentials: true });
+    }
 }

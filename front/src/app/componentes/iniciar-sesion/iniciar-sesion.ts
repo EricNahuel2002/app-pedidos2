@@ -31,8 +31,10 @@ export class IniciarSesion implements OnInit{
     const { email, password } = this.loginForm.value;
 
     this.usuarioService.iniciarSesion(email, password).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
+      next: (respuesta) => {
+        const rol = respuesta.rol;
+        const destino = rol === 'administrador' ? '/admin' : rol === 'repartidor' ? '/repartidor' : '/';
+        this.router.navigate([destino]);
       },
       error: (err) => {
         console.error('Error al iniciar sesión:', err);

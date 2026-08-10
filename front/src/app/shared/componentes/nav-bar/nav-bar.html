@@ -31,6 +31,27 @@
                         </a>
                     </li>
 
+                    <li *ngIf="role === 'administrador'" class="nav-item me-lg-2">
+                        <a routerLink="/admin" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2 text-dark rounded-3 fw-medium">
+                            <i class="pi pi-chart-bar me-2 fs-5"></i>
+                            <span class="d-lg-inline d-none">Panel Admin</span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="role === 'administrador'" class="nav-item me-lg-2">
+                        <a routerLink="/admin/repartidores" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2 text-dark rounded-3 fw-medium">
+                            <i class="pi pi-users me-2 fs-5"></i>
+                            <span class="d-lg-inline d-none">Repartidores</span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="role === 'administrador'" class="nav-item me-lg-2">
+                        <a routerLink="/admin/menus" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2 text-dark rounded-3 fw-medium">
+                            <i class="pi pi-book me-2 fs-5"></i>
+                            <span class="d-lg-inline d-none">Menús</span>
+                        </a>
+                    </li>
+
                     <li class="nav-item me-3">
                         <a routerLink="/perfil" routerLinkActive="active" class="btn btn-outline-primary d-flex align-items-center px-3 py-1 rounded-pill">
                             <i class="pi pi-user fs-5"></i>

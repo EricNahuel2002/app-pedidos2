@@ -39,7 +39,7 @@ export class UsuarioService {
 
 
     iniciarSesion(email: string, contrasenia: string) {
-        return this.http.post(`${environment.BACKEND_URL}/auth/login`,
+        return this.http.post<{ rol: string }>(`${environment.BACKEND_URL}/auth/login`,
           {email,contrasenia},{withCredentials: true});
     }
 

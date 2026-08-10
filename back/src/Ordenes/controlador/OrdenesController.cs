@@ -167,4 +167,18 @@ public class OrdenesController : Controller
             return StatusCode(500, "Error interno del servidor");
         }
     }
+
+    [HttpGet("administracion/estadisticas")]
+    public async Task<IActionResult> ObtenerEstadisticasAsync()
+    {
+        try
+        {
+            var resultado = await _ordenServicio.ObtenerEstadisticasDeOrdenes();
+            return Ok(resultado);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Error interno del servidor");
+        }
+    }
 }

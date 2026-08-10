@@ -48,4 +48,41 @@ public class MenuController : Controller
             return StatusCode(500, "Error al obtener los menus");
         }
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> ActualizarMenuAsync(int id, Menu menu)
+    {
+        try
+        {
+            menu.Id = id;
+            var actualizado = await _menuServicio.ActualizarMenuAsync(menu);
+            return Ok(actualizado);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(new { mensaje = "El menú no existe" });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Error al actualizar el menu");
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> EliminarMenuAsync(int id)
+    {
+        try
+        {
+            await _menuServicio.EliminarMenuAsync(id);
+            return Ok(new { mensaje = "Menú eliminado correctamente" });
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(new { mensaje = "El menú no existe" });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Error al eliminar el menu");
+        }
+    }
 }

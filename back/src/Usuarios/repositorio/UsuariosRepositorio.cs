@@ -10,6 +10,9 @@ public interface IUsuariosRepositorio
     Task<Usuario> ObtenerUsuarioPorId(int id);
     Task<Rol> ObtenerRolPorNombre(string nombre);
     Task<Usuario> GuardarUsuarioAsync(Usuario usuario);
+    Task<List<Usuario>> ObtenerTodosLosUsuariosAsync();
+    Task<List<Usuario>> ObtenerRepartidoresPendientesAsync();
+    Task<bool> VerificarRepartidorAsync(int id);
 }
 public class UsuariosRepositorio: IUsuariosRepositorio
 {
@@ -48,5 +51,37 @@ public class UsuariosRepositorio: IUsuariosRepositorio
         _ctx.Usuarios.Add(usuario);
         await _ctx.SaveChangesAsync();
         return usuario;
+    }
+
+    public async Task<List<Usuario>> ObtenerTodosLosUsuariosAsync()
+    {
+        return await _ctx.Usuarios
+            .Include(u => u.Cliente)
+            .Include(u => u.Repartidor)
+            .Include(u => u.UsuarioRoles)
+            .ThenInclude(ur => ur.Rol)
+            .ToListAsync();
+    }
+
+    public async Task<List<Usuario>> ObtenerRepartidoresPendientesAsync()
+    {
+        return await _ctx.Usuarios
+            .Where(u => u.Repartidor != null && !u.Repartidor.Verificado)
+            .Include(u => u.Repartidor)
+            .ToListAsync();
+    }
+
+    public async Task<bool> VerificarRepartidorAsync(int id)
+    {
+        Repartidor? repartidor = await _ctx.Repartidores.FirstOrDefaultAsync(r => r.IdUsuario == id);
+
+        if (repartidor == null)
+        {
+            return false;
+        }
+
+        repartidor.Verificado = true;
+        await _ctx.SaveChangesAsync();
+        return true;
     }
 }

@@ -13,6 +13,9 @@ public interface IUsuariosServicio
     Task<UsuarioDto> ValidarCredencialesDeUsuario(LoginDto dto);
     Task RegistrarClienteAsync(RegistrarClienteDto dto);
     Task RegistrarRepartidorAsync(RegistrarRepartidorDto dto);
+    Task<List<UsuarioAdministracionDto>> ObtenerUsuariosParaAdministracion();
+    Task<List<RepartidorPendienteDto>> ObtenerRepartidoresPendientes();
+    Task VerificarRepartidor(int id);
 }
 public class UsuariosServicio : IUsuariosServicio
 {
@@ -156,5 +159,45 @@ public class UsuariosServicio : IUsuariosServicio
         });
 
         await _usuarioRepo.GuardarUsuarioAsync(usuario);
+    }
+
+    public async Task<List<UsuarioAdministracionDto>> ObtenerUsuariosParaAdministracion()
+    {
+        List<Usuario> usuarios = await _usuarioRepo.ObtenerTodosLosUsuariosAsync();
+
+        return usuarios.Select(u => new UsuarioAdministracionDto
+        {
+            Id = u.Id,
+            Nombre = u.Nombre,
+            Email = u.Email,
+            Rol = u.UsuarioRoles?.Select(ur => ur.Rol?.Nombre).FirstOrDefault() ?? "Sin rol",
+            EsCliente = u.Cliente != null,
+            EsRepartidor = u.Repartidor != null,
+            RepartidorVerificado = u.Repartidor?.Verificado ?? false
+        }).ToList();
+    }
+
+    public async Task<List<RepartidorPendienteDto>> ObtenerRepartidoresPendientes()
+    {
+        List<Usuario> repartidores = await _usuarioRepo.ObtenerRepartidoresPendientesAsync();
+
+        return repartidores.Select(u => new RepartidorPendienteDto
+        {
+            Id = u.Id,
+            Nombre = u.Nombre,
+            Email = u.Email,
+            Dni = u.Repartidor!.Dni,
+            FotoDniUrl = u.Repartidor.FotoDniUrl
+        }).ToList();
+    }
+
+    public async Task VerificarRepartidor(int id)
+    {
+        bool resultado = await _usuarioRepo.VerificarRepartidorAsync(id);
+
+        if (!resultado)
+        {
+            throw new KeyNotFoundException($"No se encontró el repartidor con id {id}");
+        }
     }
 }
