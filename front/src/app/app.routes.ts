@@ -56,6 +56,13 @@ export const routes: Routes = [
         data: {roles:['repartidor']}
     },
     {
+        path : 'repartidor/resenas',
+        loadComponent : () => import("@componentes/repartidor/resenas/resenas")
+        .then(c => c.RepartidorResenas),
+        canActivate : [authGuard],
+        data: {roles:['repartidor']}
+    },
+    {
         path : 'admin',
         loadComponent : () => import("@componentes/admin/panel-admin/panel-admin")
         .then(c => c.PanelAdmin),
@@ -73,6 +80,13 @@ export const routes: Routes = [
         path : 'admin/menus',
         loadComponent : () => import("@componentes/admin/gestion-menus/gestion-menus")
         .then(c => c.GestionMenus),
+        canActivate : [authGuard],
+        data : { roles:['administrador']}
+    },
+    {
+        path : 'admin/resenas',
+        loadComponent : () => import("@componentes/admin/resenas/resenas")
+        .then(c => c.AdminResenas),
         canActivate : [authGuard],
         data : { roles:['administrador']}
     }

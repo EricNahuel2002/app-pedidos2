@@ -10,6 +10,7 @@ namespace Ordenes.contexto
         }
 
         public DbSet<Orden> Ordenes { get; set; } = null!;
+        public DbSet<Resena> Resenas { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,27 @@ namespace Ordenes.contexto
                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             builder.ToTable("Ordenes");
+
+            var resenaBuilder = modelBuilder.Entity<Resena>();
+
+            resenaBuilder.HasKey(r => r.Id);
+            resenaBuilder.Property(r => r.Id).ValueGeneratedOnAdd();
+
+            resenaBuilder.Property(r => r.IdOrden).IsRequired();
+            resenaBuilder.HasIndex(r => r.IdOrden).IsUnique();
+
+            resenaBuilder.Property(r => r.IdCliente).IsRequired();
+            resenaBuilder.Property(r => r.IdRepartidor).IsRequired();
+            resenaBuilder.Property(r => r.NombreCliente).IsRequired().HasMaxLength(150);
+            resenaBuilder.Property(r => r.NombreRepartidor).IsRequired().HasMaxLength(150);
+            resenaBuilder.Property(r => r.Puntaje).IsRequired();
+            resenaBuilder.Property(r => r.Comentario).HasMaxLength(500);
+
+            resenaBuilder.Property(r => r.FechaCreacion)
+                   .HasColumnType("datetime")
+                   .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            resenaBuilder.ToTable("Resenas");
         }
     }
 }

@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.resena-resumen,
+.resena-item {
+  background-color: #ffffff !important;
+  color: #000000;
+}
+
+.resena-item {
+  border-color: #dee2e6 !important;
+}
+
+.resena-comentario {
+  color: #000000;
+}
+
+.resena-fecha {
+  color: #333333 !important;
+}

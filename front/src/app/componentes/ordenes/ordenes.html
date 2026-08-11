@@ -47,7 +47,13 @@
             <td>{{ orden.fechaOrden}}</td>
   
             <td class="text-center">
-              <p-splitbutton class="text-white" label="Cancelar orden" (onClick)="cancelarOrden(orden.idOrden)" [model]="items" severity="danger" />
+              @if (orden.estado === 'FINALIZADA') {
+                <button class="btn btn-success btn-sm d-flex align-items-center gap-1 mx-auto" (click)="abrirDialogoResena(orden)">
+                  <i class="pi pi-star-fill"></i> Calificar
+                </button>
+              } @else {
+                <p-splitbutton class="text-white" label="Cancelar orden" (onClick)="cancelarOrden(orden.idOrden)" [model]="items" severity="danger" />
+              }
             </td>
           </tr>
         }
@@ -55,5 +61,49 @@
 
     </table>
   </div>
+
+  <p-dialog
+    header="Calificar repartidor"
+    [modal]="true"
+    [(visible)]="dialogVisible"
+    [style]="{ width: '450px' }"
+    styleClass="resena-dialog"
+    contentStyleClass="resena-dialog-content"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    @if (ordenAcalificar(); as orden) {
+      <div class="text-center mb-3">
+        <div class="text-muted small">Orden #{{ orden.idOrden }} · {{ orden.nombreRepartidor }}</div>
+      </div>
+
+      <div class="mb-3 text-center">
+        <label class="form-label d-block">Puntaje</label>
+        <p-rating
+          [ngModel]="puntaje()"
+          (ngModelChange)="puntaje.set($event)"
+          stars="5"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="comentarioResena" class="form-label">Comentario (opcional)</label>
+        <textarea
+          id="comentarioResena"
+          class="form-control"
+          rows="3"
+          maxlength="500"
+          [ngModel]="comentario()"
+          (ngModelChange)="comentario.set($event)"
+          placeholder="Cuéntanos cómo estuvo el servicio"
+        ></textarea>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <p-button label="Cancelar" severity="secondary" (onClick)="dialogVisible.set(false)" />
+        <p-button label="Enviar reseña" (onClick)="enviarResena()" />
+      </div>
+    }
+  </p-dialog>
 
 </div>

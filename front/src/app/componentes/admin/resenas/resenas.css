@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.table-resenas {
+  background-color: #ffffff !important;
+  color: #000000;
+}
+
+.table-resenas th,
+.table-resenas td {
+  background-color: #ffffff !important;
+  color: #000000;
+}
+
+.table-resenas thead th {
+  background-color: #f8f9fa !important;
+  color: #000000;
+}

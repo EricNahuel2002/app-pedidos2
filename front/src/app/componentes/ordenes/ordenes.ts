@@ -3,7 +3,11 @@ import { Orden } from '@interfaces/orden.interface';
 import { OrdenService } from '@servicios/orden/orden.service';
 import { UsuarioService } from '@servicios/usuario/usuario.service';
 import { NgClass } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { DialogModule } from 'primeng/dialog';
+import { RatingModule } from 'primeng/rating';
+import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
 import { MenuItemContent } from 'primeng/menu';
 import { MessageService } from 'primeng/api';
@@ -13,7 +17,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ordenes',
-  imports: [NgClass,SplitButtonModule],
+  imports: [NgClass, SplitButtonModule, DialogModule, RatingModule, FormsModule, ButtonModule],
   templateUrl: './ordenes.html',
   styleUrl: './ordenes.css',
 })
@@ -29,6 +33,11 @@ export class Ordenes implements OnInit{
       return this.ordenes();
     })
     items:MenuItem[] = [MenuItemContent]
+
+    dialogVisible = signal(false);
+    ordenAcalificar = signal<Orden | null>(null);
+    puntaje = signal(0);
+    comentario = signal('');
   
     ngOnInit(): void {
       this.listarOrdenesDelUsuario();
@@ -76,6 +85,57 @@ export class Ordenes implements OnInit{
             }
       })
       
+    }
+
+    abrirDialogoResena(orden: Orden): void {
+        this.ordenAcalificar.set(orden);
+        this.puntaje.set(0);
+        this.comentario.set('');
+        this.dialogVisible.set(true);
+    }
+
+    enviarResena(): void {
+        const orden = this.ordenAcalificar();
+
+        if (!orden || this.puntaje() < 1 || this.puntaje() > 5) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Calificación requerida',
+                detail: 'Selecciona un puntaje de 1 a 5 estrellas',
+            });
+            return;
+        }
+
+        this.ordenService.crearResena(orden.idOrden, this.puntaje(), this.comentario()).subscribe({
+            next: () => {
+                this.dialogVisible.set(false);
+                this.listarOrdenesDelUsuario();
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Reseña enviada',
+                    detail: 'Gracias por calificar tu orden',
+                });
+            },
+            error: (err: HttpErrorResponse) => {
+                const status = err.status;
+                const detail = err.error?.mensaje || err.error || 'Error desconocido del servidor.';
+
+                let summary = 'Error al enviar reseña';
+                if (status === 409) {
+                    summary = 'Reseña existente';
+                } else if (status === 404) {
+                    summary = 'Orden no encontrada';
+                } else if (status === 400) {
+                    summary = 'Solicitud inválida';
+                }
+
+                this.messageService.add({
+                    severity: 'error',
+                    summary: summary,
+                    detail: detail,
+                });
+            },
+        });
     }
 
     

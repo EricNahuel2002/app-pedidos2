@@ -6,7 +6,7 @@
 -- El rol ya se crea al arrancar el servicio Usuarios (cliente/repartidor/administrador).
 --
 -- Ejecutar con el backend levantado:
---   docker compose exec mysql mysql -uadmin -proot < seed.sql
+--   docker compose exec mysql mysql --default-character-set=utf8mb4 -uadmin -proot < seed.sql
 --
 -- Es idempotente: solo inserta datos que no existen.
 -- ============================================================================
@@ -100,7 +100,14 @@ INSERT IGNORE INTO Ordenes (IdOrden, IdCliente, IdMenu, NombreMenu, NombreClient
 (2, @idEric, 3, 'Hamburguesa con papas', 'Eric Aquino', 'cliente@example.com', 1500, 'EN CURSO', 'Lamadrid 123', @idJuan, 'Juan Perez', '30123456', NOW()),
 (3, @idMaria, 4, 'Lomo completo', 'Maria Garcia', 'maria@example.com', 2000, 'FINALIZADA', 'Av. Siempre Viva 742', @idJuan, 'Juan Perez', '30123456', NOW()),
 (4, @idMaria, 6, 'Tarta de verdura', 'Maria Garcia', 'maria@example.com', 900, 'CANCELADA', 'Av. Siempre Viva 742', NULL, NULL, NULL, NOW()),
-(5, @idEric, 8, 'Ensalada César', 'Eric Aquino', 'cliente@example.com', 1300, 'PENDIENTE', 'Lamadrid 123', NULL, NULL, NULL, NOW());
+(5, @idEric, 8, 'Ensalada César', 'Eric Aquino', 'cliente@example.com', 1300, 'PENDIENTE', 'Lamadrid 123', NULL, NULL, NULL, NOW()),
+(6, @idEric, 2, 'Pizza de muzzarella', 'Eric Aquino', 'cliente@example.com', 1200, 'FINALIZADA', 'Lamadrid 123', @idJuan, 'Juan Perez', '30123456', NOW()),
+(7, @idEric, 5, 'Milanesa napolitana', 'Eric Aquino', 'cliente@example.com', 1800, 'FINALIZADA', 'Lamadrid 123', @idJuan, 'Juan Perez', '30123456', NOW());
+
+INSERT IGNORE INTO Resenas (IdOrden, IdCliente, IdRepartidor, NombreCliente, NombreRepartidor, Puntaje, Comentario, FechaCreacion) VALUES
+(3, @idMaria, @idJuan, 'Maria Garcia', 'Juan Perez', 5, 'Excelente repartidor, muy puntual y amable.', NOW()),
+(6, @idEric, @idJuan, 'Eric Aquino', 'Juan Perez', 4, 'Muy buen servicio, todo llegó perfecto.', NOW()),
+(7, @idEric, @idJuan, 'Eric Aquino', 'Juan Perez', 3, 'Tardó un poco más de lo esperado, pero llegó todo bien.', NOW());
 
 -- ============================================================================
 USE db_notificaciones;

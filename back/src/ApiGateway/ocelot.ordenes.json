@@ -170,6 +170,82 @@
       "RouteClaimsRequirement": {
         "role": "administrador"
       }
+    },
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/resenas",
+      "DownstreamPathTemplate": "/api/resenas",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "cliente"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/resenas/mias",
+      "DownstreamPathTemplate": "/api/resenas/mias",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "repartidor"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/admin/resenas",
+      "DownstreamPathTemplate": "/api/resenas/administracion",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "administrador"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "Delete" ],
+      "UpstreamPathTemplate": "/admin/resenas/{id}",
+      "DownstreamPathTemplate": "/api/resenas/administracion/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordenes",
+          "Port": 5000
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": "administrador"
+      }
     }
   ]
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environment/environment.development';
 import { Orden } from '@interfaces/orden.interface';
+import { Resena, ResenasRepartidor } from '@interfaces/resena.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -53,5 +54,34 @@ export class OrdenService {
 
   finalizarOrden(id:number){
     return this.http.patch(`${environment.BACKEND_URL}/ordenes/marcarOrdenFinalizada`,id,{withCredentials : true, responseType: 'text' as 'json'})
+  }
+
+  crearResena(idOrden: number, puntaje: number, comentario: string) {
+    return this.http.post(
+      `${environment.BACKEND_URL}/resenas`,
+      { idOrden, puntaje, comentario },
+      { withCredentials: true }
+    );
+  }
+
+  obtenerResenasMias(): Observable<ResenasRepartidor> {
+    return this.http.get<ResenasRepartidor>(
+      `${environment.BACKEND_URL}/resenas/mias`,
+      { withCredentials: true }
+    );
+  }
+
+  obtenerResenasAdministracion(): Observable<Resena[]> {
+    return this.http.get<Resena[]>(
+      `${environment.BACKEND_URL}/admin/resenas`,
+      { withCredentials: true }
+    );
+  }
+
+  eliminarResena(id: number) {
+    return this.http.delete(
+      `${environment.BACKEND_URL}/admin/resenas/${id}`,
+      { withCredentials: true }
+    );
   }
 }

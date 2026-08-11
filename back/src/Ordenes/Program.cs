@@ -72,6 +72,8 @@ builder.Services.AddDbContext<OrdenesDbContext>(options =>
 
 builder.Services.AddScoped<IOrdenesRepositorio, OrdenesRepositorio>();
 builder.Services.AddScoped<IOrdenesServicio, OrdenesServicio>();
+builder.Services.AddScoped<IResenasRepositorio, ResenasRepositorio>();
+builder.Services.AddScoped<IResenasServicio, ResenasServicio>();
 
 builder.Services.AddHttpClient("Apigateway", client =>
 {

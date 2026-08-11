@@ -31,6 +31,13 @@
                         </a>
                     </li>
 
+                    <li *ngIf="role === 'repartidor'" class="nav-item me-lg-2">
+                        <a routerLink="/repartidor/resenas" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2 text-dark rounded-3 fw-medium">
+                            <i class="pi pi-star me-2 fs-5"></i>
+                            <span class="d-lg-inline d-none">Mis reseñas</span>
+                        </a>
+                    </li>
+
                     <li *ngIf="role === 'administrador'" class="nav-item me-lg-2">
                         <a routerLink="/admin" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2 text-dark rounded-3 fw-medium">
                             <i class="pi pi-chart-bar me-2 fs-5"></i>
@@ -49,6 +56,13 @@
                         <a routerLink="/admin/menus" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2 text-dark rounded-3 fw-medium">
                             <i class="pi pi-book me-2 fs-5"></i>
                             <span class="d-lg-inline d-none">Menús</span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="role === 'administrador'" class="nav-item me-lg-2">
+                        <a routerLink="/admin/resenas" routerLinkActive="active" class="nav-link d-flex align-items-center px-3 py-2 text-dark rounded-3 fw-medium">
+                            <i class="pi pi-star me-2 fs-5"></i>
+                            <span class="d-lg-inline d-none">Reseñas</span>
                         </a>
                     </li>
 
